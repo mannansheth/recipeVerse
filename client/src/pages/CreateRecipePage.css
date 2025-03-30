@@ -1,0 +1,17 @@
+.create-recipe-page {
+  padding: 2rem 0;
+}
+
+.page-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 1rem;
+}
+
+.page-description {
+  font-size: var(--font-size-lg);
+  color: var(--color-muted);
+  margin-bottom: 2rem;
+  max-width: 800px;
+}
+

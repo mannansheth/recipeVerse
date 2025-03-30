@@ -1,0 +1,157 @@
+.profile-container {
+  max-width: 80%;
+  margin: auto;
+  padding: 30px;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  margin: 2% 10% 5% 10%;
+}
+
+.profile-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: black;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 25px;
+}
+
+.tabs button {
+  background: none;
+  border: none;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  border-bottom: 4px solid #007bff;
+  color: #007bff;
+}
+
+.wishlist-container {
+  text-align: left;
+  margin-top: 20px;
+}
+
+.wishlist-grid,
+.cookbook-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.update-form input {
+  width: 50%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.logout-button {
+  background: var(--color-destructive);
+  color: white;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 6px;
+  margin-top: 20px;
+  transition: background 0.3s;
+}
+
+.logout-button:hover {
+  background: darkred;
+}
+
+@media (max-width: 600px) {
+  .profile-container {
+    padding: 15px;
+    margin: 5%;
+  }
+
+  .profile-title {
+    font-size: 24px;
+  }
+
+  .tabs {
+    flex-direction: column;
+  }
+
+  .tabs button {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .wishlist-grid,
+  .cookbook-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .update-form input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 20px;
+    margin: 5%;
+  }
+
+  .profile-title {
+    font-size: 26px;
+  }
+
+  .tabs button {
+    font-size: 17px;
+    padding: 11px;
+  }
+
+  .wishlist-grid,
+  .cookbook-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .update-form input {
+    width: 70%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .profile-container {
+    padding: 30px;
+    margin: 2% 10% 5% 10%;
+  }
+
+  .profile-title {
+    font-size: 28px;
+  }
+
+  .tabs button {
+    font-size: 18px;
+    padding: 12px;
+  }
+
+  .wishlist-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  .cookbook-grid {
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  }
+
+  .update-form input {
+    width: 50%;
+  }
+}

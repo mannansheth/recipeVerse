@@ -1,0 +1,144 @@
+.recipe-filters {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.filter-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.filter-reset-button {
+  background: none;
+  border: none;
+  color: var(--color-muted);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.filter-reset-button:hover {
+  color: var(--color-destructive);
+}
+
+.filter-section {
+  margin-bottom: 1.5rem;
+}
+
+.filter-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: 0.25rem;
+}
+
+.search-input-container {
+  position: relative;
+  margin-top:10%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem 0.5rem 2rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.625rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-muted);
+  font-size: var(--font-size-sm);
+}
+
+.filter-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+.filter-section-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.filter-section-toggle {
+  font-size: var(--font-size-lg);
+  color: var(--color-muted);
+}
+
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+}
+
+.filter-checkbox {
+  margin-right: 0.5rem;
+}
+
+.filter-option-label {
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+.time-range-container {
+  margin-top: 0.5rem;
+}
+
+.time-inputs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.time-input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.time-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-muted);
+  margin-bottom: 0.25rem;
+}
+
+.time-input {
+  width: 4rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+}
+
+.time-range {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.apply-filters-button {
+  width: 100%;
+  margin-top: 1rem;
+}
+
