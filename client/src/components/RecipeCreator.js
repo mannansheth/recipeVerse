@@ -39,7 +39,6 @@ const RecipeCreator = () => {
       setIsGenerating(true)
     }
     setGeneratedRecipe(JSON.parse(localStorage.getItem("recipe")))
-    
   }, [])
   useEffect(() => {
     if (generatedRecipe) {
@@ -73,8 +72,10 @@ const RecipeCreator = () => {
     setIsGenerating(true)
     localStorage.setItem("recipeStatus", 'generating')
     setError(null)
+    console.log(ingredients);
+    
     try {
-      const response = await axios.post('http://192.168.1.100:5001/get-recipe', {
+      const response = await axios.post('http://192.168.1.39:5001/get-recipe', {
         ingredients
       })
       console.log(response.data);
@@ -200,16 +201,20 @@ const RecipeCreator = () => {
             {error && <p className="error-message">{error}</p>}
           </div>
         </div>
-
+        
         <div className="recipe-creator-result">
           {isGenerating ? 
+          <>
+
+            <button onClick={() => localStorage.removeItem("recipeStatus")}>Stop generating</button>
             <iframe
             src='/FruitNinja/index.html'
             width="100%"
             height="700px"
             style={{ border: "none" }}
             sandbox="allow-scripts allow-same-origin"
-          ></iframe>
+            ></iframe>
+            </>
           :
             <>
             <h2 className="recipe-creator-title">Generated Recipe</h2>

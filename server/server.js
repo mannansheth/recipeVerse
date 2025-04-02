@@ -12,6 +12,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const jwtSecret = process.env.JWT_SECRET;
+const ngrok_url = process.env.NGROK_URL;
 
 const db = mysql.createConnection({
   host: 'localhost',
@@ -163,8 +164,8 @@ app.post('/login', (req, res) => {
     const token = jwt.sign( {userId: user.id}, jwtSecret, {expiresIn: '1h'})
     return res.status(200).json({ success: true, message:'Login succesful', token});
 
-  })
-})
+  }) 
+}) 
 
 app.post('/get-recipe', async (req, res) => {
   try {
@@ -174,12 +175,12 @@ app.post('/get-recipe', async (req, res) => {
     if (!ingredients || ingredients.length === 0) {
       return res.status(400).json({ error: 'No ingredients provided' });
     }
-    const response = await axios.post('http://localhost:5002/generate-recipe', {ingredients})
-    console.log(response.data);
+    const response = await axios.post(`https://b18d-103-195-202-250.ngrok-free.app/generate-recipe`, {ingredients})
+    console.log((response.data));
     
-    res.json(response.data)
+    res.json((response.data))
   } catch (error) {
-    console.error('Error: ', error.message);
+    console.error('Error: ', error);
     res.status(500).json({error:'Failed to generate recipe'})
   }
 })

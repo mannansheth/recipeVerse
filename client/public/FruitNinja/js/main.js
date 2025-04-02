@@ -24,6 +24,11 @@ function preload(){
     missed = loadSound('sounds/missed.mp3');
     start = loadSound('sounds/start.mp3');
     over = loadSound('sounds/over.mp3');
+    boom.setVolume(0);
+    spliced.setVolume(0);
+    missed.setVolume(0);
+    start.setVolume(0);
+    over.setVolume(0);
 
     // LOAD IMAGES
     for(var i=0; i<fruitsList.length-1; i++){

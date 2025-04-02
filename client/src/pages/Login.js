@@ -46,7 +46,7 @@ const Login = ({ setIsLoggedIn }) => {
 
     try {
       const endpoint = authType;
-      const response = await axios.post(`http://192.168.1.100:5001/${endpoint}`, { username, email, password });
+      const response = await axios.post(`http://10.125.40.172:5001/${endpoint}`, { username, email, password });
 
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);

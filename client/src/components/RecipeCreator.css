@@ -191,6 +191,7 @@
 .generated-recipe-image {
   position:absolute;
   right:5%;
+  width:25%;
 }
 @media(max-width:768px) {
   .generated-recipe-image {
