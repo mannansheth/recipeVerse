@@ -48,12 +48,12 @@
   grid-template-columns: 1fr;
   gap: 1.5rem;
   width: 100%;
-  max-width: 36rem;
+  max-width: 54rem;
 }
 
 @media (min-width: 768px) {
   .hero-cards {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
 
@@ -87,7 +87,10 @@
   content: "📚";
   font-size: 2rem;
 }
-
+.dish-icon::before {
+  content:"🍽️";
+  font-size:2rem;
+}
 .chef-hat-icon::before {
   content: "👨‍🍳";
   font-size: 2rem;
@@ -97,7 +100,10 @@
   content: "→";
   margin-left: 0.5rem;
 }
-
+.note-icon::before {
+  content:"📝";
+  font-size:2rem;
+}
 .bookmark-icon::before {
   content: "🔖";
   font-size: 2rem;
@@ -136,7 +142,7 @@
 
 @media (min-width: 768px) {
   .features-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 

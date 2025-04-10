@@ -1,8 +1,5 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import RecipeFilters from "../components/RecipeFilters"
-import RecipeGrid from "../components/RecipeGrid"
 import Recipes from '../components/Recipes'
 import "./RecipesPage.css"
 

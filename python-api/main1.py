@@ -2,9 +2,24 @@ import os
 import ollama
 from flask import Flask, request, jsonify
 from datetime import datetime
-
+import json
 app = Flask(__name__)
 
+def classify_recipe(ingredients):
+    non_veg_keywords = ["chicken", "beef", "pork", "fish", "tuna", "shrimp", "lamb", "bacon", "broth", "gelatin", "anchovy", "duck", "oyster", "crab", "meat", "sausage", "ham"]
+    dairy_keywords = ["milk", "butter", "cheese", "cream", "yogurt", "whey"]
+    jain_keywords = ["onion", "garlic", "potato", "carrot", "radish", "beetroot"]
+    honey_keywords = ["honey"]
+
+    ingredients_text = " ".join(ingredients).lower()  # Convert list to a single lowercase string
+
+    if any(word in ingredients_text for word in non_veg_keywords):
+        return "Non-Vegetarian"
+    elif any(word in ingredients_text for word in dairy_keywords) or any(word in ingredients_text for word in honey_keywords):
+        return "Vegetarian"
+    else:
+        return "Vegan"
+    
 context = """
 You are a recipe generation AI. I will give you a list of ingredients, you may add some ingredients of your choice, and give me back an appropriate recipe in this format: 
 {
@@ -35,9 +50,8 @@ You are a recipe generation AI. I will give you a list of ingredients, you may a
                 "name":"",
                 "quantity":""
             },
-        ],
-        "Diet":"Vegan/Vegetarian/Non-Vegetarian"
-    },
+        ]
+    }
 IMPORTANT: include all fields and return the JSON
 """
 
@@ -68,7 +82,9 @@ def generate_recipe():
         prompt = build_prompt(ingredients)
         output = run_ollama(prompt)
         if output:
-            return jsonify(output)
+            recipe = json.loads(output)
+            recipe['Diet'] = classify_recipe([ingredient["name"] for ingredient in recipe['Ingredients']])
+            return jsonify(recipe)
         else:
             return jsonify({"error": "Failed to generate recipe"}), 500
     except NameError as e:

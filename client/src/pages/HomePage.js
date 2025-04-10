@@ -34,11 +34,22 @@ function HomePage() {
 
             <div className="hero-card">
               <div className="hero-card-content">
-                <i className="hero-icon chef-hat-icon"></i>
+                <i className="hero-icon dish-icon"></i>
                 <h2 className="hero-card-title">Create Recipe</h2>
-                <p className="hero-card-description">Generate recipes with ingredients you have</p>
+                <p className="hero-card-description">Find out nutritional info about your favourite recipes</p>
                 <Link to="/create" className="button primary">
                   Create Now
+                  <i className="arrow-right-icon"></i>
+                </Link>
+              </div>
+            </div>
+            <div className="hero-card">
+              <div className="hero-card-content">
+                <i className="hero-icon chef-hat-icon"></i>
+                <h2 className="hero-card-title">Generate Recipe</h2>
+                <p className="hero-card-description">Generate recipes with ingredients you have</p>
+                <Link to="/generate" className="button primary">
+                  Generate Now
                   <i className="arrow-right-icon"></i>
                 </Link>
               </div>
@@ -56,6 +67,13 @@ function HomePage() {
               </div>
               <h3 className="feature-title">Browse Recipes</h3>
               <p className="feature-description">Explore our extensive collection of recipes with powerful filters</p>
+            </div>
+            <div className="feature">
+              <div className="feature-icon-container">
+                <i className="feature-icon note-icon"></i>
+              </div>
+              <h3 className="feature-title">Fetch macros</h3>
+              <p className="feature-description">Know nutrition info about your favourite recipes</p>
             </div>
             <div className="feature">
               <div className="feature-icon-container">

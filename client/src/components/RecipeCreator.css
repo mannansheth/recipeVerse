@@ -191,7 +191,9 @@
 .generated-recipe-image {
   position:absolute;
   right:5%;
-  width:25%;
+  width:38%;
+  border:1px solid rgb(86, 86, 86);
+  border-radius:10px;
 }
 @media(max-width:768px) {
   .generated-recipe-image {
@@ -266,4 +268,9 @@
   font-weight: var(--font-weight-medium);
   cursor: pointer;
 }
+.save-recipe-button:hover {
+  background-color: rgb(209, 61, 209);
+  transition:0.2s
+}
+
 

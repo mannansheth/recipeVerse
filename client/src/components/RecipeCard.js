@@ -12,7 +12,7 @@ const RecipeCard = ({ recipe, isFavorite, onToggleFavorite }) => {
     <div className="recipe-card">
       <Link to={`/recipes/${recipe.RecipeId}`} className="recipe-card-link">
         <div className="recipe-image-container">
-          <img src={recipe.Images[0].replace(/^"|"$/g, "").replace(/\\\//g, "/") || `/placeholder.jpg`} alt={recipe.Name} className="recipe-image" />
+          <img src={recipe.Images[0].replace(/^"|"$/g, "").replace(/\\\//g, "/") || `/assets/placeholder.jpg`} alt={recipe.Name} className="recipe-image" />
           <button
             className={`favorite-button ${isFavorite ? "is-favorite" : ""}`}
             onClick={(e) => onToggleFavorite(e, recipe.RecipeId)}

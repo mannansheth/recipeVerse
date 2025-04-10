@@ -7,12 +7,17 @@ const jwt = require('jsonwebtoken');
 const axios = require('axios')
 const app = express();
 const fs = require("fs");
+const path = require('path');
 require('dotenv').config();
 app.use(cors()); 
 app.use(bodyParser.json());
 
 const jwtSecret = process.env.JWT_SECRET;
-const ngrok_url = process.env.NGROK_URL;
+const python_api_url = process.env.PYTHON_API_URL;
+const REVIEWS_FILE = path.join(__dirname,'..' ,'client/src/data/reviews.json')
+console.log(__dirname);
+console.log(REVIEWS_FILE);
+
 
 const db = mysql.createConnection({
   host: 'localhost',
@@ -42,7 +47,7 @@ const authenticateToken = (req, res, next) => {
   });
 };
 app.post('/add-recipe', authenticateToken, (req, res) => {
-  const userId = req.user.userId;
+  const userId = req.user.userId;  
   const {recipe} = req.body;
   const sql = 'INSERT INTO `ai-recipes` (recipe, user_id) VALUES (?, ?)';
   db.query(sql, [recipe, userId], (err, result) => {
@@ -52,10 +57,10 @@ app.post('/add-recipe', authenticateToken, (req, res) => {
     }
     res.status(200).json({ message: "Recipe added"});
   })
-})
-app.get('/get-recipe', authenticateToken, (req, res) => {
+}) 
+app.get('/get-user-recipes', authenticateToken, (req, res) => {
   const userId = req.user.userId;
-  const sql = 'SELECT recipe FROM `ai-recipes` WHERE user_id = ? ';
+  const sql = 'SELECT id, recipe FROM `ai-recipes` WHERE user_id = ? ';
   db.query(sql, [userId], (error, results) => {
     if (error) {
       console.log(error);
@@ -64,6 +69,25 @@ app.get('/get-recipe', authenticateToken, (req, res) => {
     }
     res.json(results);
   })
+})
+app.delete('/delete-user-recipe', authenticateToken, (req, res) => {
+  const { id } = req.body
+  console.log(id);
+  
+  const sql = 'DELETE FROM `ai-recipes` WHERE id = ?'
+  try {
+    db.query(sql, [id], (err, result) => {
+      if (err) {
+        console.log(err);
+        
+        return res.status(500).json({message:err})
+
+      }
+      res.status(200).json({message: "Deleted"})
+    })
+  } catch (error) {
+    res.status(500).json({message: error})
+  }
 })
 app.get('/profile', authenticateToken, async (req, res) => {
   const userId = req.user.userId;
@@ -102,10 +126,10 @@ app.put('/update-password', async (req, res) => {
 
 app.put('/update-info', authenticateToken, async (req, res) => {
   const userId = req.user.userId;
-  const { name, email, number, address, pincode } = req.body;
-  const query = 'UPDATE users SET name = ?, email = ?, number = ?, address = ?, pincode = ? WHERE id = ?';
+  const { username, email } = req.body;
+  const query = 'UPDATE users SET username = ?, email = ? WHERE id = ?';
   try {
-      db.query(query, [name, email, number, address, pincode, userId], (err, result) => {
+      db.query(query, [username, email, userId], (err, result) => {
         if (err) return res.status(500).json( {message: 'Database error'});        
         res.json({ name, email, number, address, pincode});
       })
@@ -175,13 +199,31 @@ app.post('/get-recipe', async (req, res) => {
     if (!ingredients || ingredients.length === 0) {
       return res.status(400).json({ error: 'No ingredients provided' });
     }
-    const response = await axios.post(`https://b18d-103-195-202-250.ngrok-free.app/generate-recipe`, {ingredients})
-    console.log((response.data));
-    
-    res.json((response.data))
+    const response = await axios.post(`${python_api_url}/generate-recipe`, {ingredients})
+    res.json(response.data);
   } catch (error) {
-    console.error('Error: ', error);
     res.status(500).json({error:'Failed to generate recipe'})
   }
+})
+
+app.post('/add-review/:RecipeId', authenticateToken, async (req, res) => {
+  const AuthorId = req.user.userId
+  const recipeId = req.params.RecipeId
+  const newReview = req.body
+  
+  fs.readFile(REVIEWS_FILE, "utf8", (err, data) => {
+    if (err) return res.status(500).json({ error: "Failed to read file" });
+
+    let reviews = JSON.parse(data);
+    const length = Object.values(reviews).flat().length
+    if (!reviews[recipeId]) {
+      reviews[recipeId] = []
+    }
+    reviews[recipeId].push({ReviewId : length+1, ...newReview})
+    fs.writeFile(REVIEWS_FILE, JSON.stringify(reviews, null, 2), (err) => {
+        if (err) return res.status(500).json({ error: "Failed to write file" });
+        res.json(reviews);
+    });
+  });
 })
 app.listen(5001, '0.0.0.0', () => console.log("Server runnning on port 5001"))

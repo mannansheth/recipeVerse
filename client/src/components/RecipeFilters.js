@@ -24,41 +24,30 @@ function RecipeFilters() {
     time: true,
   })
 
-  // Filter options
   const cuisines = [
     "Dessert",
     "High Protein",
     "Low Carb",
-    "Chinese",
-    "Indian",
-    "Japanese",
-    "Thai",
-    "French",
-    "Mediterranean",
-    "American",
-    "Korean",
+    "Beverages",
+    "Breakfast",
+    "Lunch",
+    "Chicken",
+    "Easy"
   ]
 
   const diets = [
     "Vegetarian",
     "Vegan",
     "Non-Vegetarian",
-    "Low-Carb",
-    "Low-Fat",
-    "High Protein",
   ]
 
-  // Handle cuisine selection
   const toggleCuisine = (cuisine) => {
     setSelectedCuisines((prev) => (prev.includes(cuisine) ? prev.filter((c) => c !== cuisine) : [...prev, cuisine]))
   }
 
-  // Handle diet selection
   const toggleDiet = (diet) => {
     setSelectedDiets((prev) => (prev.includes(diet) ? prev.filter((d) => d !== diet) : [...prev, diet]))
   }
-
-  // Handle time range change
   const handleTimeChange = (e, index) => {
     const newValue = Number.parseInt(e.target.value)
     setTimeRange((prev) => {
@@ -68,7 +57,6 @@ function RecipeFilters() {
     })
   }
 
-  // Toggle section expansion
   const toggleSection = (section) => {
     setExpandedSections((prev) => ({
       ...prev,
@@ -76,7 +64,6 @@ function RecipeFilters() {
     }))
   }
 
-  // Apply filters
   const applyFilters = () => {
     const params = new URLSearchParams()
 

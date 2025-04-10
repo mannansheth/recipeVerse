@@ -36,6 +36,7 @@
   overflow: hidden;
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
   height: 100%;
+  margin:0;
   background-color: var(--color-background);
 }
 
@@ -70,7 +71,7 @@
 }
 
 .recipe-card:hover .recipe-image {
-  transform: scale(1.05);
+  transform: scale(1.2);
 }
 
 .favorite-button {

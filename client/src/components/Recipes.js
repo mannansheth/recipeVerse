@@ -1,9 +1,8 @@
-"use client"
 
 import { useState, useEffect, useCallback } from "react"
 import { Link, useSearchParams } from "react-router-dom"
 import "./RecipeGrid.css"
-import data from '../data/mock1.json'
+import data from '../data/recipes.json'
 import RecipeCard from "./RecipeCard"
 
 const Recipes = () => {

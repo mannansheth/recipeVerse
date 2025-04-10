@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { useTheme } from "../contexts/ThemeContext"
 import "./Navbar.css"
-import { FaAccessibleIcon, FaAsymmetrik, FaHeading, FaHeadSideCough, FaHeart, FaIcons, FaPersonRifle, FaUser } from "react-icons/fa6"
+import { FaHeart, FaUser } from "react-icons/fa6"
 
 function Navbar( {isLoggedIn }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -16,6 +16,7 @@ function Navbar( {isLoggedIn }) {
     { name: "Home", path: "/" },
     { name: "Recipes", path: "/recipes" },
     { name: "Create", path: "/create" },
+    { name: "Generate", path: "/generate"},
     { name: "About", path: "/about" },
   ]
 
@@ -35,7 +36,7 @@ function Navbar( {isLoggedIn }) {
           <ul className="navbar-nav-list">
             {navItems.map((item) => (
               <li key={item.name} className="navbar-nav-item">
-                <Link to={item.path} className={`navbar-nav-link ${location.pathname === item.path ? "active" : ""}`}>
+                <Link to={item.path} className={`navbar-nav-link ${location.pathname === (item.path) ? "active" : ""}`}>
                   {item.name}
                 </Link>
               </li>

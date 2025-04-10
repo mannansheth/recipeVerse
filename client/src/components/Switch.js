@@ -15,10 +15,10 @@ const Switch = ( {authType}) => {
 
 const StyledWrapper = styled.div`
   .switch {
-    --_switch-bg-clr:rgb(211, 134, 255);
+    --_switch-bg-clr:var(--color-primary);
     --_switch-padding: 4px; /* padding around button*/
-    --_slider-bg-clr: rgb(114, 0, 114); /* slider color unchecked */
-    --_slider-bg-clr-on: rgb(114, 0, 114); /* slider color checked */
+    --_slider-bg-clr: transparent; /* slider color unchecked */
+    --_slider-bg-clr-on: transparent; /* slider color checked */
     --_slider-txt-clr: #ffffff;
     --_label-padding: 1rem 2rem; /* padding around the labels -  this gives the switch it's global width and height */
     --_switch-easing: cubic-bezier(

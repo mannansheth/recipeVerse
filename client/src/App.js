@@ -4,8 +4,7 @@ import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
 import HomePage from "./pages/HomePage"
 import RecipesPage from "./pages/RecipesPage"
-// import RecipeDetailPage from "./pages/RecipeDetailPage"
-import CreateRecipePage from "./pages/CreateRecipePage"
+import GenerateRecipePage from "./pages/GenerateRecipePage"
 // import LoginPage from "./pages/LoginPage"
 // import RegisterPage from "./pages/RegisterPage"
 import ProfilePage from "./pages/ProfilePage"
@@ -18,6 +17,8 @@ import { useEffect, useState } from "react"
 import { UserProvider } from "./contexts/UserContext"
 import UseCheckStatus from "./hooks/UseCheckStatus"
 import ScrollToTop from "./components/ScrollToTop"
+import RecipeDetailsPage from "./pages/RecipeDetailsPage"
+import UserRecipePage from "./pages/UserRecipePage"
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -46,14 +47,14 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/recipes" element={<RecipesPage />} />
-            {/* <Route path="/recipes/:id" element={<RecipeDetailPage />} /> */}
-            <Route path="/create" element={<CreateRecipePage />} />
+            <Route path="/recipes/:id" element={<RecipeDetailsPage isLoggedIn={isLoggedIn}/>} />
+            <Route path="/recipes/generated" element={<RecipeDetailsPage isLoggedIn={isLoggedIn}/>} />
+            <Route path="/generate" element={<GenerateRecipePage />} />
+            <Route path="/create" element={<UserRecipePage />} />
             <Route path="/auth" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
             
             <Route path="/profile" element={<ProtectedRoute><ProfilePage setIsLoggedIn={setIsLoggedIn} /></ProtectedRoute>} />
             {/* 
-            <Route path="/register" element={<RegisterPage />} />
-            
             <Route path="/about" element={<AboutPage />} />
             <Route path="*" element={<NotFoundPage />} /> */}
           </Routes>

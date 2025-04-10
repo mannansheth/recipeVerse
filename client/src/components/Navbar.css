@@ -26,10 +26,12 @@
 .navbar-logo {
   width:8%;
   margin-left:10%;
+
 }
 @media(max-width:600px) {
   .navbar-logo {
     width:25%;
+    margin-left:0;
   }
 }
 .navbar-img {

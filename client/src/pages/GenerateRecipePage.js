@@ -1,11 +1,11 @@
 import RecipeCreator from "../components/RecipeCreator"
-import "./CreateRecipePage.css"
+import "./GenerateRecipePage.css"
 
-const CreateRecipePage = () => {
+const GenerateRecipePage = () => {
   return (
-    <div className="create-recipe-page">
+    <div className="generate-recipe-page">
       <div className="container">
-        <h1 className="page-title">Create Your Recipe</h1>
+        <h1 className="page-title">Generate Your Recipe</h1>
         <p className="page-description">
           Enter the ingredients you have, and our AI will generate a delicious recipe for you.
         </p>
@@ -30,5 +30,5 @@ const CreateRecipePage = () => {
   )
 }
 
-export default CreateRecipePage
+export default GenerateRecipePage
 

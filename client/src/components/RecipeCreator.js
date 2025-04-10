@@ -7,6 +7,7 @@ import axios from "axios"
 import { toast } from "react-toastify"
 
 const RecipeCreator = () => {
+  
   const navigate = useNavigate()
   const [ingredients, setIngredients] = useState([])
   const [currentIngredient, setCurrentIngredient] = useState("")
@@ -17,6 +18,8 @@ const RecipeCreator = () => {
   const [error, setError] = useState(null)
   const [isImageLoading, setIsImageLoading] = useState(true)
   const API_KEY = process.env.REACT_APP_PEXELS_API_KEY
+  const IP_ADDRESS = process.env.REACT_APP_IP_ADDRESS
+
   const addIngredient = () => {
     if (currentIngredient.trim() && !ingredients.includes(currentIngredient.trim())) {
       setIngredients([...ingredients, currentIngredient.trim()])
@@ -53,7 +56,7 @@ const RecipeCreator = () => {
         },
         params: {
           query: name,
-          per_page:1,
+          per_page:2,
         }
       });
       const curr_recipe = generatedRecipe;
@@ -75,16 +78,16 @@ const RecipeCreator = () => {
     console.log(ingredients);
     
     try {
-      const response = await axios.post('http://192.168.1.39:5001/get-recipe', {
+      const response = await axios.post(`http://${IP_ADDRESS}:5001/get-recipe`, {
         ingredients
-      })
+      })  
       console.log(response.data);
-      setGeneratedRecipe(JSON.parse(response.data))
-      localStorage.setItem("recipe", (response.data))
+      setGeneratedRecipe(response.data)
+      localStorage.setItem("recipe", (JSON.stringify(response.data)))
       localStorage.setItem('recipeStatus', 'ready')
     } catch (error) {
       console.error("Error generating recipe:", error)
-      setError("Failed to generate recipe. Please try again.")
+      setError("Failed to generate recipe. Please try again.", error)
     } finally {
       setIsGenerating(false)
     }
@@ -93,7 +96,7 @@ const RecipeCreator = () => {
   const handleSaveRecipe = async () => {
     const recipe = JSON.stringify(generatedRecipe)
     try {
-      const response = await axios.post('http://192.168.1.100:5001/add-recipe', {recipe}, {
+      const response = await axios.post(`http://${IP_ADDRESS}:5001/add-recipe`, {recipe}, {
         headers : {
           Authorization: `Bearer: ${localStorage.getItem("token")}`
         }
@@ -116,6 +119,10 @@ const RecipeCreator = () => {
     setTimeout(() => {
       window.location.reload()
     }, 100) 
+  }
+
+  const handleViewFullRecipe = () => {
+    navigate('/recipes/generated', {state: { generatedRecipe }})
   }
   return (
     <div className="recipe-creator">
@@ -276,6 +283,7 @@ const RecipeCreator = () => {
                 Save Recipe
               </button>
               <button onClick={clearRecipe} className='save-recipe-button'>Clear recipe</button>
+              <button onClick={handleViewFullRecipe} className='save-recipe-button'>View full recipe</button>
             </div>
           ) : (
             <div className="no-recipe-placeholder">

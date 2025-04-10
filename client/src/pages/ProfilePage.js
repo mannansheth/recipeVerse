@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import { toast } from 'react-toastify';
-import data from '../data/mock1.json';
+import data from '../data/recipes.json';
 import RecipeCard from '../components/RecipeCard';
 import './ProfilePage.css';
 import { error } from 'console';
@@ -9,6 +9,7 @@ import axios from 'axios';
 import CookbookCard from '../components/CookbookCard';
 
 const ProfilePage = ({ setIsLoggedIn }) => {
+  const IP_ADDRESS = process.env.REACT_APP_IP_ADDRESS
   const { userInfo, setUserInfo } = useContext(UserContext);
   const [activeTab, setActiveTab] = useState("wishlist");
   const [favorites, setFavorites] = useState([]);
@@ -24,14 +25,16 @@ const ProfilePage = ({ setIsLoggedIn }) => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get('http://192.168.1.100:5001/get-recipe', {
+        const response = await axios.get(`http://${IP_ADDRESS}:5001/get-user-recipes`, {
           headers:{
             Authorization : `Bearer: ${localStorage.getItem("token")}`
           } 
         })
         const genrecipes = [];
         response.data.forEach(r => {
-          genrecipes.push(JSON.parse(r['recipe']))
+          const parsed_recipe = JSON.parse(r['recipe'])
+          parsed_recipe['id'] = r['id'] 
+          genrecipes.push(parsed_recipe)
         })
         setUserRecipes(genrecipes);
       } catch (err) {
@@ -70,7 +73,7 @@ const ProfilePage = ({ setIsLoggedIn }) => {
 
   return (
     <div className="profile-container">
-      <h1 className="profile-title">My Profile</h1>
+      <h1 className="profile-title">Hi, {userInfo.username}</h1>
       
       <div className="tabs">
         <button className={activeTab === "wishlist" ? "active" : ""} onClick={() => setActiveTab("wishlist")}>
@@ -110,10 +113,11 @@ const ProfilePage = ({ setIsLoggedIn }) => {
           <div>
             <h2>My Cookbook</h2>
             <div className="cookbook-grid">
-            {userRecipes.map((recipe, i) => (
+            {userRecipes.map(recipe => (
               <CookbookCard 
-              key={i}
+              key={recipe.id}
               recipe = {recipe}
+              setUserRecipes = {setUserRecipes}
               />
             ))}
             </div>
@@ -123,14 +127,17 @@ const ProfilePage = ({ setIsLoggedIn }) => {
         {activeTab === "update" && (
           <>
           <div className="update-form">
-            <h2>Update Profile</h2>
-            <label>Name:</label>
-            <input type="text" placeholder="Enter name" />
-            <label>Email:</label>
-            <input type="email" placeholder="Enter email" />
+            <h2 className="form-heading">Update Profile</h2>
             
+            <label className="form-label">Username:</label>
+            <input className="form-input" type="text" placeholder="Enter username" />
+            
+            <label className="form-label">Email:</label>
+            <input className="form-input" type="email" placeholder="Enter email" />
           </div>
-          <button>Save Changes</button>
+
+          <button className="form-button">Save Changes</button>
+
           </>
         )}
       </div>

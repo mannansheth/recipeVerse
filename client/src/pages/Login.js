@@ -7,6 +7,7 @@ import Switch from '../components/Switch';
 import './Login.css'
 
 const Login = ({ setIsLoggedIn }) => {
+  const IP_ADDRESS = process.env.REACT_APP_IP_ADDRESS
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("")
@@ -46,7 +47,7 @@ const Login = ({ setIsLoggedIn }) => {
 
     try {
       const endpoint = authType;
-      const response = await axios.post(`http://10.125.40.172:5001/${endpoint}`, { username, email, password });
+      const response = await axios.post(`http://${IP_ADDRESS}:5001/${endpoint}`, { username, email, password });
 
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);

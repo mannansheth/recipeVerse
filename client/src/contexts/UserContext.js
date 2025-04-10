@@ -3,6 +3,7 @@ import axios from "axios";
 export const UserContext = createContext();
 
 export const UserProvider = ({ children, isLoggedIn }) => {
+  const IP_ADDRESS = process.env.REACT_APP_IP_ADDRESS
   const [userInfo, setUserInfo] = useState({
       username:'',
       email: '',
@@ -11,7 +12,7 @@ export const UserProvider = ({ children, isLoggedIn }) => {
     const fetchData = async () => {
       if (!isLoggedIn) return;
       try {
-        const response = await axios.get('http://192.168.1.100:5001/profile', {
+        const response = await axios.get(`http://${IP_ADDRESS}:5001/profile`, {
           headers: {
             Authorization: `Bearer: ${localStorage.getItem("token")}`
           }
