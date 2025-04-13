@@ -22,6 +22,7 @@ const RecipeDetailsPage = ({ isLoggedIn }) => {
   const [hover, setHover] = useState(0)
   const [rating, setRating] = useState(null)
   const [reviewText, setReviewText] = useState("")
+  const [viewTab, setViewTab] = useState("image")
   const IP_ADDRESS = process.env.REACT_APP_IP_ADDRESS
   useEffect(() => {
     const id_in_int = Number(id)
@@ -30,8 +31,6 @@ const RecipeDetailsPage = ({ isLoggedIn }) => {
   }, [])
   useEffect(() => {
     if (recipe) {
-      console.log(recipe);
-      
       setLoading(false)
     }
   }, [recipe])
@@ -75,7 +74,7 @@ const RecipeDetailsPage = ({ isLoggedIn }) => {
   const formatTime = (timeString) => {
     if (!timeString) return "N/A"
     const minutes = timeString.replace("PT", "").replace("M", "")
-    return `${minutes} minutes`
+    return minutes.includes('minutes') ? minutes : `${minutes} minutes`
   }
 
   const toggleFavorite = () => {
@@ -105,7 +104,6 @@ const RecipeDetailsPage = ({ isLoggedIn }) => {
       Review: reviewText,
       DateSubmitted: new Date().toISOString()
     }
-    console.log(reviewDeets);
     setReviews(prev => [reviewDeets, ...prev])
     try {
       const response = await axios.post(`http://${IP_ADDRESS}:5001/add-review/${recipe.RecipeId}`, reviewDeets, {
@@ -162,13 +160,48 @@ const RecipeDetailsPage = ({ isLoggedIn }) => {
             </div>
             <p className="recipe-page-description">{recipe.Description}</p>
           </div>
-
+          {!recipe.RecipeId &&
+            <div className="recipe-page-tabs-list">
+            <button
+              className={`tab-button ${viewTab === "image" ? "active" : ""}`}
+              onClick={() => setViewTab("image")}
+            >
+              Image
+            </button>
+            <button
+              className={`tab-button ${viewTab === "video" ? "active" : ""}`}
+              onClick={() => setViewTab("video")}
+            >
+              Video
+            </button>
+          </div>
+          }
+          
           <div className="recipe-page-image-container">
-            <img
-              src={recipe.Images ? recipe.Images[0]?.replace(/"/g, "") : "/assets/placeholder.jpg"}
-              alt={recipe.Name}
-              className="recipe-page-image"
-            />
+            {!recipe.RecipeId ?
+              viewTab === 'image' ? (
+                <img
+                src={recipe.image ? recipe.image.src.medium
+                  : "/assets/placeholder.jpg"}
+                  alt={recipe.Name}
+                  className="recipe-page-image"
+                />
+                ) 
+                : 
+                viewTab === 'video' && recipe.videoURL && 
+                <video width="100%" controls autoPlay muted={false}>
+                  <source src={recipe.videoURL} type="video/mp4" />
+                  Your browser does not support the video tag
+                </video>
+             :
+                <img
+                src={recipe.RecipeId ? recipe.Images[0]?.replace(/"/g, "") 
+                  : "/assets/placeholder.jpg"}
+                alt={recipe.Name}
+                className="recipe-page-image"
+              />
+            }
+            
           </div>
 
           <div className="recipe-page-quick-info">

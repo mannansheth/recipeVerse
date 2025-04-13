@@ -34,22 +34,22 @@ function HomePage() {
 
             <div className="hero-card">
               <div className="hero-card-content">
-                <i className="hero-icon dish-icon"></i>
-                <h2 className="hero-card-title">Create Recipe</h2>
-                <p className="hero-card-description">Find out nutritional info about your favourite recipes</p>
-                <Link to="/create" className="button primary">
-                  Create Now
+                <i className="hero-icon chef-hat-icon"></i>
+                <h2 className="hero-card-title">Generate Recipe</h2>
+                <p className="hero-card-description">Generate recipes with ingredients you have</p>
+                <Link to="/generate" className="button primary">
+                  Generate Now
                   <i className="arrow-right-icon"></i>
                 </Link>
               </div>
             </div>
             <div className="hero-card">
               <div className="hero-card-content">
-                <i className="hero-icon chef-hat-icon"></i>
-                <h2 className="hero-card-title">Generate Recipe</h2>
-                <p className="hero-card-description">Generate recipes with ingredients you have</p>
-                <Link to="/generate" className="button primary">
-                  Generate Now
+                <i className="hero-icon dish-icon"></i>
+                <h2 className="hero-card-title">Know your diet</h2>
+                <p className="hero-card-description">Find out nutritional info about your favourite recipes</p>
+                <Link to="/nutritions" className="button primary">
+                  Find out Now
                   <i className="arrow-right-icon"></i>
                 </Link>
               </div>
@@ -73,7 +73,7 @@ function HomePage() {
                 <i className="feature-icon note-icon"></i>
               </div>
               <h3 className="feature-title">Fetch macros</h3>
-              <p className="feature-description">Know nutrition info about your favourite recipes</p>
+              <p className="feature-description">Know nutrition information about your favourite recipes</p>
             </div>
             <div className="feature">
               <div className="feature-icon-container">

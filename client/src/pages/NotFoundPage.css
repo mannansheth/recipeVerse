@@ -1,0 +1,381 @@
+.not-found-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f7ff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding: 2rem 1rem;
+}
+
+.not-found-container {
+  max-width: 800px;
+  width: 100%;
+}
+
+.not-found-content {
+  background-color: white;
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.not-found-title {
+  font-size: 8rem;
+  font-weight: 800;
+  color: #8b5cf6;
+  margin: 0;
+  line-height: 1;
+  text-shadow: 3px 3px 0 rgba(139, 92, 246, 0.2);
+}
+
+.not-found-subtitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 1rem 0;
+  color: #1a1a1a;
+}
+
+.not-found-message {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 2.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Cooking Pot Animation */
+.cooking-pot-container {
+  margin: 3rem auto;
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.cooking-pot {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.pot-lid {
+  position: absolute;
+  width: 120px;
+  height: 20px;
+  background-color: #555;
+  border-radius: 50% 50% 0 0;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+.pot-lid::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 15px;
+  background-color: #333;
+  border-radius: 50%;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pot-body {
+  position: absolute;
+  width: 160px;
+  height: 100px;
+  background-color: #8b5cf6;
+  border-radius: 10px 10px 80px 80px;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: hidden;
+  z-index: 2;
+}
+
+.pot-body::before {
+  content: "";
+  position: absolute;
+  width: 140px;
+  height: 20px;
+  background-color: #7c3aed;
+  border-radius: 50%;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pot-handle {
+  position: absolute;
+  width: 30px;
+  height: 60px;
+  border: 10px solid #555;
+  border-top: none;
+  border-bottom: none;
+  border-radius: 0 0 20px 20px;
+}
+
+.pot-handle.left {
+  left: -30px;
+  border-left: none;
+}
+
+.pot-handle.right {
+  right: -30px;
+  border-right: none;
+}
+
+.pot-base {
+  position: absolute;
+  width: 180px;
+  height: 20px;
+  background-color: #555;
+  border-radius: 10px;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.steam {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  top: 20px;
+  opacity: 0.5;
+  transition: all 1s ease;
+}
+
+.steam-1 {
+  left: 30px;
+}
+
+.steam-2 {
+  left: 60px;
+}
+
+.steam-3 {
+  left: 90px;
+}
+
+.steam-4 {
+  left: 120px;
+}
+
+.stir-button {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.stir-button:hover {
+  background-color: #7c3aed;
+}
+
+.stir-icon {
+  margin-right: 0.5rem;
+}
+
+/* Recipe Ideas */
+.recipe-ideas {
+  margin: 4rem 0 2rem;
+  animation: fadeIn 0.5s ease;
+}
+
+.recipe-ideas h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1a1a1a;
+}
+
+.ideas-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.ideas-list li {
+  background-color: #f3f0ff;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.ideas-list li:hover {
+  transform: translateY(-3px);
+  background-color: #e9e3ff;
+}
+
+.ideas-list a {
+  color: #8b5cf6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Search Container */
+.search-container {
+  margin: 2rem 0;
+}
+
+.search-container h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1a1a1a;
+}
+
+.search-form {
+  display: flex;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #8b5cf6;
+}
+
+.search-button {
+  background-color: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  padding: 0 1.25rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #7c3aed;
+}
+
+/* Navigation Options */
+.navigation-options {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.home-button,
+.recipes-button {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.home-button {
+  background-color: #8b5cf6;
+  color: white;
+}
+
+.home-button:hover {
+  background-color: #7c3aed;
+}
+
+.recipes-button {
+  background-color: white;
+  color: #8b5cf6;
+  border: 1px solid #8b5cf6;
+}
+
+.recipes-button:hover {
+  background-color: #f9f7ff;
+}
+
+.home-icon,
+.recipes-icon {
+  margin-right: 0.5rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .not-found-title {
+    font-size: 6rem;
+  }
+
+  .not-found-subtitle {
+    font-size: 1.5rem;
+  }
+
+  .not-found-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .navigation-options {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .home-button,
+  .recipes-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .not-found-title {
+    font-size: 4rem;
+  }
+
+  .not-found-subtitle {
+    font-size: 1.25rem;
+  }
+
+  .cooking-pot-container {
+    transform: scale(0.8);
+  }
+
+  .ideas-list {
+    flex-direction: column;
+  }
+}

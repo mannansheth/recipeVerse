@@ -45,8 +45,13 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/create" className="footer-link">
-                  Create Recipe
+                <Link to="/generate" className="footer-link">
+                  Generate Recipe
+                </Link>
+              </li>
+              <li>
+                <Link to="/nutritions" className="footer-link">
+                  GKnow your diet
                 </Link>
               </li>
               <li>

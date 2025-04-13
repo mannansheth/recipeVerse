@@ -15,8 +15,9 @@ function Navbar( {isLoggedIn }) {
   const navItems = [
     { name: "Home", path: "/" },
     { name: "Recipes", path: "/recipes" },
-    { name: "Create", path: "/create" },
+    
     { name: "Generate", path: "/generate"},
+    { name: "Know your diet", path: "/nutritions" },
     { name: "About", path: "/about" },
   ]
 

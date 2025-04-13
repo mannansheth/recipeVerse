@@ -79,8 +79,7 @@ function RecipeFilters() {
 
     params.set("minTime", timeRange[0].toString())
     params.set("maxTime", timeRange[1].toString())
-    console.log(params.get("maxTime"));
-    
+
     navigate(`/recipes?${params.toString()}`)
   }
 

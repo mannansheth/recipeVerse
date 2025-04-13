@@ -15,8 +15,6 @@ app.use(bodyParser.json());
 const jwtSecret = process.env.JWT_SECRET;
 const python_api_url = process.env.PYTHON_API_URL;
 const REVIEWS_FILE = path.join(__dirname,'..' ,'client/src/data/reviews.json')
-console.log(__dirname);
-console.log(REVIEWS_FILE);
 
 
 const db = mysql.createConnection({
@@ -46,7 +44,7 @@ const authenticateToken = (req, res, next) => {
       next();
   });
 };
-app.post('/add-recipe', authenticateToken, (req, res) => {
+app.post('/add-AI-recipe', authenticateToken, (req, res) => {
   const userId = req.user.userId;  
   const {recipe} = req.body;
   const sql = 'INSERT INTO `ai-recipes` (recipe, user_id) VALUES (?, ?)';
@@ -57,8 +55,21 @@ app.post('/add-recipe', authenticateToken, (req, res) => {
     }
     res.status(200).json({ message: "Recipe added"});
   })
+})  
+app.post('/add-user-recipe', authenticateToken, (req, res) => {
+  const userId = req.user.userId;  
+  const {recipe} = req.body;
+  const stringifiedRecipe = JSON.stringify(recipe)
+  const sql = 'INSERT INTO `user_recipes` (recipe, user_id) VALUES (?, ?)';
+  db.query(sql, [stringifiedRecipe, userId], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({error:err})
+    }
+    res.status(200).json({ message: "Recipe added"});
+  })
 }) 
-app.get('/get-user-recipes', authenticateToken, (req, res) => {
+app.get('/get-user-ai-recipes', authenticateToken, (req, res) => {
   const userId = req.user.userId;
   const sql = 'SELECT id, recipe FROM `ai-recipes` WHERE user_id = ? ';
   db.query(sql, [userId], (error, results) => {
@@ -70,18 +81,41 @@ app.get('/get-user-recipes', authenticateToken, (req, res) => {
     res.json(results);
   })
 })
-app.delete('/delete-user-recipe', authenticateToken, (req, res) => {
+app.get('/get-user-created-recipes', authenticateToken, (req, res) => {
+  const userId = req.user.userId;
+  const sql = 'SELECT id, recipe FROM `user_recipes` WHERE user_id = ? ';
+  db.query(sql, [userId], (error, results) => {
+    if (error) {
+      console.log(error);
+      return res.status(500).json({ error: "Error fetching data. "});
+    }
+    res.json(results);
+  })
+})
+app.delete('/delete-user-AI-recipe', authenticateToken, (req, res) => {
   const { id } = req.body
-  console.log(id);
-  
   const sql = 'DELETE FROM `ai-recipes` WHERE id = ?'
   try {
     db.query(sql, [id], (err, result) => {
       if (err) {
-        console.log(err);
-        
+        console.log(err); 
         return res.status(500).json({message:err})
+      }
+      res.status(200).json({message: "Deleted"})
+    })
+  } catch (error) {
+    res.status(500).json({message: error})
+  }
+})
+app.delete('/delete-user-created-recipe', authenticateToken, (req, res) => {
+  const { id } = req.body
 
+  const sql = 'DELETE FROM `user_recipes` WHERE id = ?'
+  try {
+    db.query(sql, [id], (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({message:err})
       }
       res.status(200).json({message: "Deleted"})
     })
@@ -202,6 +236,8 @@ app.post('/get-recipe', async (req, res) => {
     const response = await axios.post(`${python_api_url}/generate-recipe`, {ingredients})
     res.json(response.data);
   } catch (error) {
+    console.log(error);
+    
     res.status(500).json({error:'Failed to generate recipe'})
   }
 })
@@ -225,5 +261,21 @@ app.post('/add-review/:RecipeId', authenticateToken, async (req, res) => {
         res.json(reviews);
     });
   });
+})
+app.post('/generate-audio', async (req, res) => {
+  const { instructions, imageURL, name } = req.body;
+   
+  try {
+    const response = await axios.post(`${python_api_url}/generate-audio`, {
+      instructions: instructions,
+      imageURL : imageURL,
+      name : name
+    })
+    res.json(`${python_api_url}/${response.data.vidURL}`)
+  } catch (error) {
+    console.error("error getting video: ", error);
+    res.status(500)
+    
+  }
 })
 app.listen(5001, '0.0.0.0', () => console.log("Server runnning on port 5001"))

@@ -1,17 +1,17 @@
-"use client"
-
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import "./UserRecipePage.css"
 import axios from "axios"
 import { toast } from "react-toastify"
 import NutritionInfo from "../components/NutritionInfo"
-import { FaBluetoothB } from "react-icons/fa6"
 import Loader from "../components/Loader"
+import { useLocation, useNavigate } from "react-router-dom"
 
-const UserRecipePage = () => {
+const UserRecipePage = ({ isLoggedIn }) => {
   const APP_ID = process.env.REACT_APP_NUTRITIONIX_APP_ID
   const API_KEY = process.env.REACT_APP_NUTRITIONIX_API_KEY
-
+  const IP_ADDRESS = process.env.REACT_APP_IP_ADDRESS
+  const navigate = useNavigate()
+  const location = useLocation()
   const [recipeName, setRecipeName] = useState("")
   const [description, setDescription] = useState("")
   const [ingredients, setIngredients] = useState([{ name: "", quantity: "" }])
@@ -19,12 +19,12 @@ const UserRecipePage = () => {
   const [cookTime, setCookTime] = useState("")
   const [totalTime, setTotalTime] = useState("")
   const [category, setCategory] = useState("")
-  // const [image, setImage] = useState(null)
-  // const [imagePreview, setImagePreview] = useState("")
   const [currentStep, setCurrentStep] = useState(1)
   const [macros, setMacros] = useState(null)
   const [isMacrosLoading, setIsMacrosLoading] = useState(false)
-  const [reqdDetails, setReqdDetails] = useState(null)
+  const [macrosByIngredients, setMacrosByIngredients] = useState(null)
+  const [nutritionViewMode, setNutritionViewMode] = useState("combined")
+  const [selectedIngredient, setSelectedIngredient] = useState(null)
 
   const categories = [
     "Breakfast",
@@ -59,111 +59,171 @@ const UserRecipePage = () => {
     setIngredients(newIngredients)
   }
 
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0]
-  //   if (file) {
-  //     setImage(file)
-  //     const reader = new FileReader()
-  //     reader.onloadend = () => {
-  //       setImagePreview(reader.result)
-  //     }
-  //     reader.readAsDataURL(file)
-  //   }
-  // }
-  
   const fetchMacros = async () => {
     var ingredients_str = ""
     ingredients.forEach((item) => {
-      ingredients_str += `${item['quantity']} ${item['name']} `
+      ingredients_str += `${item["quantity"]} ${item["name"]} `
     })
     if (ingredients_str === "  ") {
       toast.error("Please enter ingredients")
       setTimeout(() => {
         setCurrentStep(2)
       }, 100)
-      return;
+      return
     }
     setIsMacrosLoading(true)
     try {
-      const response = await axios.post('https://trackapi.nutritionix.com/v2/natural/nutrients', {query: ingredients_str}, {
-        headers: {
-          'x-app-id':APP_ID,
-          'x-app-key':API_KEY,
-          'Content-Type':'application/json'
-        }
-      })
-      console.log(response.data);
-      
+      const response = await axios.post(
+        "https://trackapi.nutritionix.com/v2/natural/nutrients",
+        { query: ingredients_str },
+        {
+          headers: {
+            "x-app-id": APP_ID,
+            "x-app-key": API_KEY,
+            "Content-Type": "application/json",
+          },
+        },
+      )
+
       extractMacros(response.data)
-      
     } catch (error) {
-      console.error("Error fetching macros: ", error);
-      
+      console.error("Error fetching macros: ", error)
+      toast.error("Failed to fetch nutrition information. Please try again.")
+      setIsMacrosLoading(false)
     }
   }
 
   const extractMacros = (all_details) => {
     var detailsByIngredients = []
-    all_details['foods'].forEach((item) => {
+    all_details["foods"].forEach((item) => {
       detailsByIngredients.push({
-        "Name":item['food_name'],
-        "Serving": `${item['serving_qty']}${item['serving_unit']}`,
-        "Calories":item['nf_calories'],
-        "FatContent":item['nf_total_fat'],
-        "SaturatedFatContent":item['nf_saturated_fat'],
-        "CholesterolContent":item['nf_cholesterol'],
-        "SodiumContent":item['nf_sodium'],
-        "CarbohydrateContent":item['nf_total_carbohydrate'],
-        "FiberContent":item['nf_dietary_fiber'],
-        "SugarContent":item['nf_sugars'],
-        "ProteinContent":item['nf_protein'],
+        Name: item["food_name"],
+        Serving: `${item["serving_qty"]}${item["serving_unit"]}`,
+        Calories: item["nf_calories"],
+        FatContent: item["nf_total_fat"],
+        SaturatedFatContent: item["nf_saturated_fat"],
+        CholesterolContent: item["nf_cholesterol"],
+        SodiumContent: item["nf_sodium"],
+        CarbohydrateContent: item["nf_total_carbohydrate"],
+        FiberContent: item["nf_dietary_fiber"],
+        SugarContent: item["nf_sugars"],
+        ProteinContent: item["nf_protein"],
       })
     })
-    setReqdDetails(detailsByIngredients)
+    setMacrosByIngredients(detailsByIngredients)
+    if (detailsByIngredients.length > 0) {
+      setSelectedIngredient(0)
+    }
   }
+
   useEffect(() => {
-    if (reqdDetails) {
+    if (macrosByIngredients) {
       setMacros({
-        "Calories": Math.round(reqdDetails.reduce((sum, item) => sum + item.Calories || 0, 0), 2),
-        "FatContent":Math.round(reqdDetails.reduce((sum, item) => sum + item.FatContent || 0, 0), 2),
-        "SaturatedFatContent":Math.round(reqdDetails.reduce((sum, item) => sum + item.SaturatedFatContent || 0, 0), 2),
-        "CholesterolContent":Math.round(reqdDetails.reduce((sum, item) => sum + item.CholesterolContent || 0, 0), 2),
-        "SodiumContent":Math.round(reqdDetails.reduce((sum, item) => sum + item.SodiumContent || 0, 0), 2),
-        "CarbohydrateContent":Math.round(reqdDetails.reduce((sum, item) => sum + item.CarbohydrateContent || 0, 0), 2),
-        "FiberContent":Math.round(reqdDetails.reduce((sum, item) => sum + item.FiberContent || 0, 0), 2),
-        "SugarContent":Math.round(reqdDetails.reduce((sum, item) => sum + item.SugarContent || 0, 0), 2),
-        "ProteinContent":Math.round(reqdDetails.reduce((sum, item) => sum + item.ProteinContent || 0, 0), 2)
+        Calories: Math.round(
+          macrosByIngredients.reduce((sum, item) => sum + item.Calories || 0, 0),
+          2,
+        ),
+        FatContent: Math.round(
+          macrosByIngredients.reduce((sum, item) => sum + item.FatContent || 0, 0),
+          2,
+        ),
+        SaturatedFatContent: Math.round(
+          macrosByIngredients.reduce((sum, item) => sum + item.SaturatedFatContent || 0, 0),
+          2,
+        ),
+        CholesterolContent: Math.round(
+          macrosByIngredients.reduce((sum, item) => sum + item.CholesterolContent || 0, 0),
+          2,
+        ),
+        SodiumContent: Math.round(
+          macrosByIngredients.reduce((sum, item) => sum + item.SodiumContent || 0, 0),
+          2,
+        ),
+        CarbohydrateContent: Math.round(
+          macrosByIngredients.reduce((sum, item) => sum + item.CarbohydrateContent || 0, 0),
+          2,
+        ),
+        FiberContent: Math.round(
+          macrosByIngredients.reduce((sum, item) => sum + item.FiberContent || 0, 0),
+          2,
+        ),
+        SugarContent: Math.round(
+          macrosByIngredients.reduce((sum, item) => sum + item.SugarContent || 0, 0),
+          2,
+        ),
+        ProteinContent: Math.round(
+          macrosByIngredients.reduce((sum, item) => sum + item.ProteinContent || 0, 0),
+          2,
+        ),
       })
       setIsMacrosLoading(false)
     }
-  }, [reqdDetails])
-  const handleSubmit = (e) => {
+  }, [macrosByIngredients])
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log({
-      recipeName,
-      description,
-      ingredients,
-      prepTime,
-      cookTime,
-      totalTime,
-      category,
-    })
-    alert("Recipe submitted successfully!")
+    const recipe = {
+      Name: recipeName,
+      Description: description,
+      CookTime: cookTime,
+      PrepTime: prepTime,
+      TotalTime: totalTime,
+      Ingredients: ingredients,
+      RecipeCategory: category,
+    }
+    if (!isLoggedIn) {
+      localStorage.setItem("userRecipe", JSON.stringify(recipe))
+      toast.error("Error! You need to login first. Redirecting...")
+      setTimeout(() => {
+        navigate("/auth", { state: { location: "/nutrition" } })
+      }, 3000)
+    }
+    try {
+      const response = await axios.post(
+        `http://${IP_ADDRESS}:5001/add-user-recipe`,
+        { recipe: { ...recipe, ...macros } },
+        {
+          headers: {
+            Authorization: `Bearer: ${localStorage.getItem("token")}`,
+          },
+        },
+      )
+      toast.success("Recipe saved succesfully. Go to your profile to view it.")
+    } catch (err) {
+      console.error(err)
+    }
   }
+
+  useEffect(() => {
+    const userRecipe = JSON.parse(localStorage.getItem("userRecipe")) || location.state?.recipe || null
+    if (userRecipe) {
+      setRecipeName(userRecipe.Name || "")
+      setDescription(userRecipe.Description || "")
+      setCookTime(userRecipe.CookTime || "")
+      setPrepTime(userRecipe.PrepTime || "")
+      setTotalTime(userRecipe.TotalTime || "")
+      setIngredients(userRecipe.Ingredients)
+      setCategory(userRecipe.RecipeCategory || "")
+      setCurrentStep(location.state.step || 3)
+      localStorage.removeItem("userRecipe")
+    }
+  }, [])
 
   const handleNextStep = () => {
     if (currentStep === 1 && ingredients.length === 1 && ingredients[0].name === "") {
       toast.error("You need to enter ingredients!")
-      document.getElementById('quantity-0').focus()
-      return;
+      document.getElementById("quantity-0").focus()
+      return
     }
     setCurrentStep(currentStep + 1)
     window.scrollTo(0, 0)
   }
+
   const handlePrevStep = () => {
     setCurrentStep(currentStep - 1)
     window.scrollTo(0, 0)
   }
+
   useEffect(() => {
     if (prepTime && cookTime) {
       const prep = Number.parseInt(prepTime) || 0
@@ -172,11 +232,31 @@ const UserRecipePage = () => {
     }
   }, [prepTime, cookTime])
 
+  const handleViewModeChange = (mode) => {
+    setNutritionViewMode(mode)
+    if (mode === "ingredient" && macrosByIngredients && macrosByIngredients.length > 0 && selectedIngredient === null) {
+      setSelectedIngredient(0)
+    }
+  }
+
+  const handleIngredientSelect = (index) => {
+    setSelectedIngredient(index)
+  }
+
+  const getCurrentNutritionData = () => {
+    if (nutritionViewMode === "combined") {
+      return macros
+    } else if (nutritionViewMode === "ingredient" && macrosByIngredients && selectedIngredient !== null) {
+      return macrosByIngredients[selectedIngredient]
+    }
+    return null
+  }
+
   return (
     <div className="create-recipe-page">
       <div className="create-recipe-container">
         <div className="create-recipe-header">
-          <h1>Create Your Recipe</h1>
+          <h1>Know your diet</h1>
           <p>Share your culinary masterpiece with the RecipeVerse community</p>
         </div>
 
@@ -185,15 +265,18 @@ const UserRecipePage = () => {
             <div className="progress-bar-fill" style={{ width: `${(currentStep / 3) * 100}%` }}></div>
           </div>
           <div className="progress-steps">
-          <div className={`progress-step ${currentStep >= 1 ? "active" : ""}`} onClick={() => setCurrentStep(1) }>
+            <div className={`progress-step ${currentStep >= 1 ? "active" : ""}`} onClick={() => setCurrentStep(1)}>
               <div className="step-number">1</div>
               <span>Ingredients</span>
             </div>
-            <div className={`progress-step ${currentStep >= 2 ? "active" : ""}`} onClick={() => currentStep >=2 ? setCurrentStep(2) : null}>
+            <div
+              className={`progress-step ${currentStep >= 2 ? "active" : ""}`}
+              onClick={() => (currentStep >= 2 ? setCurrentStep(2) : null)}
+            >
               <div className="step-number">2</div>
               <span>Basic Info</span>
             </div>
-            
+
             <div className={`progress-step ${currentStep >= 3 ? "active" : ""}`}>
               <div className="step-number">3</div>
               <span>Finalize</span>
@@ -351,42 +434,6 @@ const UserRecipePage = () => {
                 <small>Automatically calculated from prep and cook times</small>
               </div>
 
-              {/* <div className="form-group">
-                <label htmlFor="recipe-image">Recipe Image</label>
-                <div className="image-upload-container">
-                  <div className="image-upload-area" onClick={() => document.getElementById("recipe-image").click()}>
-                    {imagePreview ? (
-                      <img src={imagePreview || "/placeholder.svg"} alt="Recipe preview" className="image-preview" />
-                    ) : (
-                      <>
-                        <i className="upload-icon">📷</i>
-                        <p>Click to upload an image</p>
-                        <small>JPG, PNG or GIF, max 5MB</small>
-                      </>
-                    )}
-                    <input
-                      type="file"
-                      id="recipe-image"
-                      onChange={handleImageChange}
-                      accept="image/*"
-                      className="hidden-input"
-                    />
-                  </div>
-                  {imagePreview && (
-                    <button
-                      type="button"
-                      className="remove-image-btn"
-                      onClick={() => {
-                        setImage(null)
-                        setImagePreview("")
-                      }}
-                    >
-                      Remove Image
-                    </button>
-                  )}
-                </div>
-              </div> */}
-
               <div className="form-navigation">
                 <button type="button" className="back-btn" onClick={handlePrevStep}>
                   Back
@@ -398,10 +445,6 @@ const UserRecipePage = () => {
             </div>
           )}
 
-
-
-          
-
           {/* Step 3: Finalize and Submit */}
           {currentStep === 3 && (
             <div className="form-step">
@@ -410,13 +453,8 @@ const UserRecipePage = () => {
               <div className="recipe-preview">
                 <h3>Recipe Preview</h3>
                 <div className="preview-content">
-                  <div className='preview-left'>
+                  <div className="preview-left">
                     <div className="preview-header">
-                      {/* {imagePreview && (
-                        <div className="preview-image">
-                          <img src={imagePreview || "/placeholder.svg"} alt={recipeName} />
-                        </div>
-                      )} */}
                       <div className="preview-details">
                         <h4>{recipeName || "Your Recipe Name"}</h4>
                         <p className="preview-description">
@@ -449,14 +487,70 @@ const UserRecipePage = () => {
                         ))}
                       </ul>
                     </div>
-                    <button type="button"onClick={fetchMacros} className="publish-btn">Generate macros</button>
-                  </div>
-                  <div className="preview-right">
-                    {macros ? 
-                      <NutritionInfo  macros={macros}/>
-                    : isMacrosLoading ? <Loader /> : null
-                    }
 
+                    {!macros && (
+                      <button type="button" onClick={fetchMacros} className="publish-btn">
+                        Generate macros
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="preview-right">
+                    {macros ? (
+                      <div className="nutrition-view-container">
+                        <div className="nutrition-view-selector">
+                          <div className="nutrition-view-options">
+                            <button
+                              type="button"
+                              className={`view-option-btn ${nutritionViewMode === "combined" ? "active" : ""}`}
+                              onClick={() => handleViewModeChange("combined")}
+                            >
+                              Full Recipe
+                            </button>
+                            <button
+                              type="button"
+                              className={`view-option-btn ${nutritionViewMode === "ingredient" ? "active" : ""}`}
+                              onClick={() => handleViewModeChange("ingredient")}
+                            >
+                              By Ingredient
+                            </button>
+                          </div>
+
+                          {nutritionViewMode === "ingredient" && macrosByIngredients && (
+                            <div className="ingredient-selector">
+                              <label htmlFor="ingredient-select">Select Ingredient:</label>
+                              <select
+                                id="ingredient-select"
+                                className="form-control"
+                                value={selectedIngredient}
+                                onChange={(e) => handleIngredientSelect(Number(e.target.value))}
+                              >
+                                {macrosByIngredients.map((item, index) => (
+                                  <option key={index} value={index}>
+                                    {item.Name} ({item.Serving})
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="nutrition-display">
+                          <NutritionInfo macros={getCurrentNutritionData()} />
+
+                          {nutritionViewMode === "ingredient" && (
+                            <div className="ingredient-info-note">
+                              <p>
+                                Showing nutrition for: <strong>{macrosByIngredients[selectedIngredient].Name}</strong> (
+                                {macrosByIngredients[selectedIngredient].Serving})
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ) : isMacrosLoading ? (
+                      <Loader />
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -464,11 +558,11 @@ const UserRecipePage = () => {
               <div className="submission-options">
                 <h3>What would you like to do with your recipe?</h3>
                 <div className="option-buttons">
-                  <button type="button" className="save-profile-btn">
+                  <button type="button" className="save-profile-btn" onClick={handleSubmit}>
                     Save to My Profile
                   </button>
-                  <button type="submit" className="publish-btn">
-                    Publish Recipe
+                  <button type="button" className="publish-btn" onClick={() => navigate("/profile")}>
+                    Go to profile
                   </button>
                 </div>
                 <p className="submission-note">
@@ -491,4 +585,3 @@ const UserRecipePage = () => {
 }
 
 export default UserRecipePage
-

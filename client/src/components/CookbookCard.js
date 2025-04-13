@@ -30,7 +30,7 @@ function CookbookCard({ recipe, setUserRecipes }) {
   };
   const deleteRecipe = async (id) => {
     try {
-      const response = await axios.delete(`http://${IP_ADDRESS}:5001/delete-user-recipe`, {
+      const response = await axios.delete(`http://${IP_ADDRESS}:5001/delete-user-AI-recipe`, {
         headers: {
           Authorization: `Bearer: ${localStorage.getItem("token")}`
         }, 

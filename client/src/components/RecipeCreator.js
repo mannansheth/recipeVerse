@@ -6,7 +6,7 @@ import "./RecipeCreator.css"
 import axios from "axios"
 import { toast } from "react-toastify"
 
-const RecipeCreator = () => {
+const RecipeCreator = ({isLoggedIn}) => {
   
   const navigate = useNavigate()
   const [ingredients, setIngredients] = useState([])
@@ -42,6 +42,8 @@ const RecipeCreator = () => {
       setIsGenerating(true)
     }
     setGeneratedRecipe(JSON.parse(localStorage.getItem("recipe")))
+    localStorage.removeItem("recipe")
+    localStorage.removeItem("recipeStatus")
   }, [])
   useEffect(() => {
     if (generatedRecipe) {
@@ -68,20 +70,37 @@ const RecipeCreator = () => {
       console.error('Error fetching image: ', error);
     }
   }
+  const fetchVideoByInstructions = async () => {
+    toast.info("Generating video. This usually takes upto 30 seconds.")
+    try {
+      const response = await axios.post(`http://${IP_ADDRESS}:5001/generate-audio`, {
+        instructions : generatedRecipe.RecipeInstructions,
+        imageURL:generatedRecipe.image?.src.original,
+        name: generatedRecipe.Name
+      })
 
+      toast.success("Video generated! Click on view full recipe.")
+      console.log(response.data);
+      
+      const curr_recipe = generatedRecipe;
+      curr_recipe['videoURL'] = response.data;
+      setGeneratedRecipe(curr_recipe) 
+      localStorage.setItem('recipe', JSON.stringify(curr_recipe))
+    } catch (err) {
+      console.error("Error fetching audio: ", err);
+    }
+  }
   const handleGenerateRecipe = async () => {
     localStorage.removeItem("recipe")
     if (ingredients.length === 0) return
     setIsGenerating(true)
     localStorage.setItem("recipeStatus", 'generating')
     setError(null)
-    console.log(ingredients);
-    
+    toast.info("Generating a specialized recipe for you. This may take upto 1 minute.")
     try {
       const response = await axios.post(`http://${IP_ADDRESS}:5001/get-recipe`, {
         ingredients
       })  
-      console.log(response.data);
       setGeneratedRecipe(response.data)
       localStorage.setItem("recipe", (JSON.stringify(response.data)))
       localStorage.setItem('recipeStatus', 'ready')
@@ -94,25 +113,25 @@ const RecipeCreator = () => {
   }
 
   const handleSaveRecipe = async () => {
+    if (!isLoggedIn) {
+      toast.error('You need to login first. Redirecting...');
+      setTimeout(() => {
+        navigate('/auth', {state: {location: '/generate'}})
+      }, 2500)
+      return;
+    }
     const recipe = JSON.stringify(generatedRecipe)
     try {
-      const response = await axios.post(`http://${IP_ADDRESS}:5001/add-recipe`, {recipe}, {
+      const response = await axios.post(`http://${IP_ADDRESS}:5001/add-AI-recipe`, {recipe}, {
         headers : {
           Authorization: `Bearer: ${localStorage.getItem("token")}`
         }
       })
       toast.success('Recipe saved succesfully. Go to your profile to view it.');
     } catch (err) {
-      toast.error('You need to login first. Redirecting...');
-      setTimeout(() => {
-        navigate('/auth')
-      }, 2000)
-      console.log(err);
-      
+      console.error(err);
     }
   }
-  
-
   const clearRecipe = () => {
     localStorage.removeItem("recipe");
     localStorage.removeItem("recipeStatus")
@@ -231,7 +250,7 @@ const RecipeCreator = () => {
               <h3 className="generated-recipe-title">{generatedRecipe.Name}</h3>
               <p className="generated-recipe-description">{generatedRecipe.Description}</p>
               {!isImageLoading ? 
-              <img src={generatedRecipe.image.src.tiny} className='generated-recipe-image'/>
+              <img src={generatedRecipe.image?.src.tiny} className='generated-recipe-image'/>
                 : null
             }
               
@@ -284,6 +303,8 @@ const RecipeCreator = () => {
               </button>
               <button onClick={clearRecipe} className='save-recipe-button'>Clear recipe</button>
               <button onClick={handleViewFullRecipe} className='save-recipe-button'>View full recipe</button>
+              <button onClick={fetchVideoByInstructions} className="save-recipe-button">🔊 Generate Video</button>
+
             </div>
           ) : (
             <div className="no-recipe-placeholder">

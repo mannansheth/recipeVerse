@@ -28,7 +28,7 @@
   color:rgb(128, 128, 128);
 }
 .footer {
-  background-color: var(--color-background);
+  background: linear-gradient(to right, var(--color-background), var(--color-background-effect));
 
   padding:20px 12%;
   border: 2px solid rgba(0,0,0,0.1);

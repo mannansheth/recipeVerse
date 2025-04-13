@@ -27,6 +27,7 @@
   font-size: 1.75rem;
   font-weight: 900;
   margin: 0;
+  color:black;
 }
 
 .serving-info {
@@ -37,8 +38,11 @@
 .serving-info p {
   margin: 0;
   font-size: 0.875rem;
+  color:black;
 }
-
+.nutrient-value {
+  color:black;
+}
 .calories-line {
   display: flex;
   justify-content: space-between;
@@ -53,6 +57,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   text-align: right;
+  color:black;
 }
 
 .nutrient-line {
@@ -66,6 +71,7 @@
 .nutrient-main {
   display: flex;
   justify-content: space-between;
+  color:black
 }
 
 .nutrient-sub {
@@ -76,15 +82,18 @@
 
 .nutrient-name {
   flex: 1;
+  color:black;
 }
 
 .nutrient-percent {
   text-align: right;
   font-weight: 700;
+  color:black;
 }
 
 .nutrition-footer {
   padding-top: 0.5rem;
   font-size: 0.7rem;
   line-height: 1.2;
+  color:black;
 }

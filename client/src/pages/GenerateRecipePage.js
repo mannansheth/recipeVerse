@@ -1,7 +1,7 @@
 import RecipeCreator from "../components/RecipeCreator"
 import "./GenerateRecipePage.css"
 
-const GenerateRecipePage = () => {
+const GenerateRecipePage = ({isLoggedIn}) => {
   return (
     <div className="generate-recipe-page">
       <div className="container">
@@ -24,7 +24,7 @@ const GenerateRecipePage = () => {
               sandbox="allow-scripts allow-same-origin"
             ></iframe>
         </div> */}
-        <RecipeCreator />
+        <RecipeCreator isLoggedIn={isLoggedIn}/>
       </div>
     </div>
   )

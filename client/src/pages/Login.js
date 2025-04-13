@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaExclamation, FaEye, FaEyeSlash } from 'react-icons/fa6';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import Switch from '../components/Switch';
 import './Login.css'
@@ -9,6 +9,7 @@ import './Login.css'
 const Login = ({ setIsLoggedIn }) => {
   const IP_ADDRESS = process.env.REACT_APP_IP_ADDRESS
   const navigate = useNavigate();
+  const location = useLocation()
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("");
@@ -53,7 +54,10 @@ const Login = ({ setIsLoggedIn }) => {
         localStorage.setItem("token", response.data.token);
         setIsLoggedIn(true);
         toast.success(authType==='register' ? 'Registration successful' : 'Logged in successfully');
-        navigate('/');
+        setTimeout(() => {
+          navigate(location.state?.location || '/');
+        }, 500)
+        
       } else {
         setEmailError(true);
       }
@@ -93,7 +97,7 @@ const Login = ({ setIsLoggedIn }) => {
       }, 1000);
     } catch (err) {
       toast.error(err.response?.data?.message);
-      console.log(err.response?.data?.errormsg);
+      console.error(err.response?.data?.errormsg);
       
       if (err.response?.data?.error === 'email') setEmailError(true)
     }
