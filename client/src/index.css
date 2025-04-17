@@ -9,10 +9,10 @@
   /* Color variables */
   --color-background: #ffffff;
   --color-foreground: #1a1a1a;
-  --color-primary: #6c2dff;
+  --color-primary: #187800;
   --color-background-effect:#fdedff;
-  --color-primary-light: #a78bfa;
-  --color-primary-dark: #7c3aed;
+  --color-primary-light: #02ac04;
+  --color-primary-dark: #00531c;
   --color-secondary: #f3f4f6;
   --color-secondary-dark: #e5e7eb;
   --color-muted: #6b7280;
@@ -122,9 +122,9 @@ button {
 .dark {
   --color-background: #000000;
   --color-foreground: #f9fafb;
-  --color-primary: #a78bfa;
-  --color-primary-light: #c4b5fd;
-  --color-primary-dark: #8b5cf6;
+  --color-primary: #187800;
+  --color-primary-light: #02ac04;
+  --color-primary-dark: #00531c;
   --color-secondary: #374151;
   --color-secondary-dark: #1f2937;
   --color-muted: #9ca3af;

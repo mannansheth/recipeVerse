@@ -1,3 +1,5 @@
+import { FaStar } from "react-icons/fa6"
+import { MdStar } from "react-icons/md"
 import { Link } from "react-router-dom"
 
 const RecipeCard = ({ recipe, isFavorite, onToggleFavorite }) => {
@@ -25,7 +27,7 @@ const RecipeCard = ({ recipe, isFavorite, onToggleFavorite }) => {
           <h3 className="recipe-title">{recipe.Name}</h3>
           {recipe.Description.length > 100 ? 
           <p className="recipe-description">
-            {recipe.Description.slice(0,100)}...
+            {recipe.Description.slice(0,60)}...
           </p> : 
           <p className="recipe-description">
             {recipe.Description}
@@ -36,7 +38,20 @@ const RecipeCard = ({ recipe, isFavorite, onToggleFavorite }) => {
               <span className="recipe-time-icon">⏱️</span>
               <span>{convertToMin(recipe.TotalTime.replace('PT', ''))} min</span>
             </span>
+            
           </div>
+          <span className="recipe-time">
+            {recipe.AggregatedRating ?
+            <>
+              <span className="recipe-time-icon"><FaStar className='star'/></span>
+              <span className="rating">{recipe.AggregatedRating}</span>
+            </>
+            : <>
+            <span className="recipe-time-icon"><FaStar className='star'/></span>
+            <span className="rating">No reviews yet.</span>
+            </>
+            }
+            </span>
         </div>
         <div className="recipe-footer">
           <span>

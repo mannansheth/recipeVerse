@@ -4,7 +4,8 @@
   z-index: 50;
   width: 100%;
   border-bottom: 1px solid var(--color-border);
-  background: linear-gradient(to right, var(--color-background), var(--color-background-effect));
+  /* background: linear-gradient(to right, var(--color-background), var(--color-background-effect)); */
+  background-color: var(--color-background);
   backdrop-filter: blur(8px);
 }
 

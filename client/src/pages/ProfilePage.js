@@ -108,9 +108,9 @@ const ProfilePage = ({ setIsLoggedIn }) => {
         <button className={activeTab === "created" ? "active" : ""} onClick={() => setActiveTab("created")}>
           My Recipes
         </button>
-        <button className={activeTab === "update" ? "active" : ""} onClick={() => setActiveTab("update")}>
+        {/* <button className={activeTab === "update" ? "active" : ""} onClick={() => setActiveTab("update")}>
           Update Profile
-        </button>
+        </button> */}
       </div>
 
       <div className="content">

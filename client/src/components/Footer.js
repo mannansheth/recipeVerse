@@ -51,7 +51,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link to="/nutritions" className="footer-link">
-                  GKnow your diet
+                  Know your diet
                 </Link>
               </li>
               <li>

@@ -55,11 +55,6 @@ function Navbar( {isLoggedIn }) {
 
             {isLoggedIn ? (
               <>
-                <Link to="/wishlist" className="navbar-profile-button">
-                  
-                  <span className='navbar-profile-icon icon'><FaHeart></FaHeart></span>
-                  <span className="sr-only">Wishlist</span>
-                </Link>
                 <Link to="/profile" className="navbar-profile-button">
                   
                   <span className="navbar-profile-icon icon"><FaUser ></FaUser></span>

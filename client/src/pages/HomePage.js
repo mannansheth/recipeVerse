@@ -1,14 +1,15 @@
 import { Link } from "react-router-dom"
 import HeroAnimation from "../components/HeroAnimation"
 import "./HomePage.css"
-
-function HomePage() {
+import  ReactPlayer  from "react-player";
+const HomePage = () =>  {
   return (
     <div className="home-page">
 
       <section className="hero-section">
         <div className="hero-animation">
-          <HeroAnimation />
+          {/* <HeroAnimation /> */}
+          <ReactPlayer url="/assets/home-page-video.mp4" playing loop muted width="100%" height="auto" />
         </div>
 
         <div className="container hero-content">
@@ -92,9 +93,6 @@ function HomePage() {
           </div>
         </div>
       </section>
-      <div className="home-btn">
-          <img src='/assets/chef_buton.png'></img>
-      </div>
     </div>
   )
 }

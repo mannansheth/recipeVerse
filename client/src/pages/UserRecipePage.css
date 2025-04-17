@@ -43,7 +43,7 @@
 
 .progress-bar-fill {
   height: 100%;
-  background-color: #8b5cf6;
+  background-color: var(--color-primary);
   transition: width 0.3s ease;
 }
 
@@ -79,24 +79,28 @@
 }
 
 .progress-step.active .step-number {
-  background-color: #8b5cf6;
+  background-color: var(--color-primary);
   color: white;
 }
 
 /* Form Styles */
 .create-recipe-form {
-  background-color: white;
+  background-color: var(--color-background);
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
   padding: 2rem;
   margin-bottom: 2rem;
 }
-
+.form-step {
+  border: 2px solid rgba(128, 128, 128, 0.441);
+  padding:2%;
+  border-radius: 2%;
+}
 .form-step h2 {
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
-  color: #1a1a1a;
+  color: var(--color-foreground);
 }
 
 .step-description {
@@ -121,15 +125,16 @@
 
 label {
   display: block;
-  font-weight: 500;
+  font-weight: bold;
   margin-bottom: 0.5rem;
   color: #4b5563;
+  font-size:1.1rem;
 }
 
 .form-control {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 2px solid #d1d5db;
   border-radius: 6px;
   font-size: 1rem;
   transition: border-color 0.3s ease;
@@ -137,7 +142,7 @@ label {
 
 .form-control:focus {
   outline: none;
-  border-color: #8b5cf6;
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
@@ -168,7 +173,7 @@ small {
 }
 
 .image-upload-area:hover {
-  border-color: #8b5cf6;
+  border-color: var(--color-primary);
 }
 
 .upload-icon {
@@ -237,8 +242,8 @@ small {
 
 .add-ingredient-btn {
   background: none;
-  border: 1px solid #8b5cf6;
-  color: #8b5cf6;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
   padding: 0.75rem 1rem;
   border-radius: 6px;
   cursor: pointer;
@@ -299,18 +304,18 @@ small {
 }
 
 .next-btn {
-  background-color: #8b5cf6;
+  background-color: var(--color-primary);
   border: none;
   color: white;
 }
 
 .next-btn:hover {
-  background-color: #7c3aed;
+  background-color: var(--color-primary-dark);
 }
 
 /* Recipe Preview */
 .recipe-preview {
-  background-color: #f9fafb;
+  background-color: var(--color-background);
   border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -318,16 +323,15 @@ small {
 
 .recipe-preview h3 {
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 1rem;
-  color: #1a1a1a;
+  color: var(--color-foreground);
 }
 
 .preview-content {
-  background-color: white;
+  background-color: var(--color-background);
   border-radius: 6px;
   padding: 1.5rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
@@ -363,15 +367,17 @@ small {
 
 .preview-details h4 {
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 0.5rem;
-  color: #1a1a1a;
+  color: var(--color-foreground);
 }
 
 .preview-description {
-  color: #4b5563;
+  color: #909090;
   margin-bottom: 1rem;
   line-height: 1.5;
+  font-weight:500;
+  font-size: 1.125rem;
 }
 
 .preview-meta {
@@ -379,28 +385,32 @@ small {
   flex-direction: column;
   flex-wrap: wrap;
   gap: 1rem;
+  
 }
 
 .preview-meta span {
-  font-size: 0.875rem;
-  color: #6b7280;
+  font-size: 0.925rem;
+  color: #8b8b8b;
+  font-weight:500;
 }
 
 .preview-ingredients h5 {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
-  color: #1a1a1a;
+  color: var(--color-foreground);
 }
 
 .preview-ingredients ul {
   list-style-type: disc;
   padding-left: 1.5rem;
-  color: #4b5563;
+  color: #878787;
 }
 
 .preview-ingredients li {
   margin-bottom: 0.5rem;
+  font-size:1.1rem;
+  font-weight:700;
 }
 
 /* Nutrition View Selector */
@@ -436,12 +446,12 @@ small {
 }
 
 .view-option-btn:hover {
-  color: #1a1a1a;
+  color: var(--color-foreground);
 }
 
 .view-option-btn.active {
-  color: #8b5cf6;
-  border-bottom-color: #8b5cf6;
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
 }
 
 .ingredient-selector {
@@ -472,7 +482,7 @@ small {
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: #1a1a1a;
+  color: var(--color-foreground);
 }
 
 .option-buttons {
@@ -493,8 +503,8 @@ small {
 
 .save-profile-btn {
   background-color: white;
-  border: 1px solid #8b5cf6;
-  color: #8b5cf6;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
 }
 
 .save-profile-btn:hover {
@@ -502,13 +512,13 @@ small {
 }
 
 .publish-btn {
-  background-color: #8b5cf6;
+  background-color: var(--color-primary);
   border: none;
   color: white;
 }
 
 .publish-btn:hover {
-  background-color: #7c3aed;
+  background-color: var(--color-primary-dark);
 }
 
 .submission-note {

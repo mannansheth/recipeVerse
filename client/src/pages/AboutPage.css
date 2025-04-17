@@ -44,7 +44,7 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  color: #8b5cf6;
+  color: var(--color-primary);
   text-align: center;
 }
 
@@ -77,7 +77,7 @@
 
 .feature-icon {
   font-size: 2.5rem;
-  color: #8b5cf6;
+  color: var(--color-primary);
   margin-bottom: 1.5rem;
 }
 
@@ -85,6 +85,7 @@
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 1rem;
+  color:black;
 }
 
 .feature-card p {
@@ -105,7 +106,7 @@
 }
 
 .step-number-abt {
-  background-color: #8b5cf6;
+  background-color: var(--color-primary);
   color: white;
   width: 50px;
   height: 50px;
@@ -156,7 +157,7 @@
   justify-content: center;
   margin: 0 auto 1.5rem;
   font-size: 2.5rem;
-  color: #8b5cf6;
+  color: var(--color-primary);
 }
 
 .team-member h3 {
@@ -176,7 +177,7 @@
 }
 
 .contact-section a {
-  color: #8b5cf6;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
 }
@@ -194,7 +195,7 @@
   align-items: center;
   justify-content: center;
   padding: 0.75rem 1.5rem;
-  background-color: #8b5cf6;
+  background-color: var(--color-primary);
   color: white;
   border-radius: 8px;
   font-weight: 500;
@@ -203,7 +204,7 @@
 }
 
 .contact-button-abt:hover {
-  background-color: #7c3aed;
+  background-color: var(--color-primary-dark);
 }
 
 .contact-icon {
@@ -212,7 +213,7 @@
 
 /* CTA Section */
 .about-cta {
-  background-color: #f3f0ff;
+  background-color: #e2ffe0;
   padding: 5rem 2rem;
   text-align: center;
   margin-top: 3rem;
@@ -252,18 +253,18 @@
 }
 
 .cta-button.primary {
-  background-color: #8b5cf6;
+  background-color: var(--color-primary);
   color: white;
 }
 
 .cta-button.primary:hover {
-  background-color: #7c3aed;
+  background-color: var(--color-primary-dark);
 }
 
 .cta-button.secondary {
   background-color: white;
-  color: #8b5cf6;
-  border: 1px solid #8b5cf6;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
 }
 
 .cta-button.secondary:hover {

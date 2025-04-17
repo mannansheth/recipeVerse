@@ -42,7 +42,7 @@ const authenticateToken = (req, res, next) => {
       }
       req.user = user; 
       next();
-  });
+  }); 
 };
 app.post('/add-AI-recipe', authenticateToken, (req, res) => {
   const userId = req.user.userId;  
@@ -95,7 +95,7 @@ app.get('/get-user-created-recipes', authenticateToken, (req, res) => {
 app.delete('/delete-user-AI-recipe', authenticateToken, (req, res) => {
   const { id } = req.body
   const sql = 'DELETE FROM `ai-recipes` WHERE id = ?'
-  try {
+  try { 
     db.query(sql, [id], (err, result) => {
       if (err) {
         console.log(err); 
@@ -227,13 +227,15 @@ app.post('/login', (req, res) => {
 
 app.post('/get-recipe', async (req, res) => {
   try {
-    const { ingredients } = req.body;
+    const { ingredients, preference, notes } = req.body;
     console.log(ingredients);
+    console.log(preference);
+    console.log(notes);
     
     if (!ingredients || ingredients.length === 0) {
       return res.status(400).json({ error: 'No ingredients provided' });
     }
-    const response = await axios.post(`${python_api_url}/generate-recipe`, {ingredients})
+    const response = await axios.post(`${python_api_url}/generate-recipe`, {ingredients, preference, notes})
     res.json(response.data);
   } catch (error) {
     console.log(error);

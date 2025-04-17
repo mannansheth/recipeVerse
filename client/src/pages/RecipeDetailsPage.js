@@ -34,6 +34,25 @@ const RecipeDetailsPage = ({ isLoggedIn }) => {
       setLoading(false)
     }
   }, [recipe])
+  const fetchVideoByInstructions = async () => {
+      toast.info("Generating video. This usually takes upto 30 seconds.")
+      try {
+        const response = await axios.post(`http://${IP_ADDRESS}:5001/generate-audio`, {
+          instructions : recipe.RecipeInstructions,
+          imageURL:recipe.image?.src.original,
+          name: recipe.Name
+        })
+        toast.success("Video generated! Click on view full recipe.")
+        const curr_recipe = recipe;
+        curr_recipe['videoURL'] = response.data;
+        console.log(curr_recipe);
+        
+        setRecipe(curr_recipe) 
+        localStorage.setItem('recipe', JSON.stringify(curr_recipe))
+      } catch (err) {
+        console.error("Error fetching audio: ", err);
+      }
+    }
   useEffect(() => {
     if (recipe) {
       const favs = JSON.parse(localStorage.getItem("favorites"))
@@ -73,8 +92,11 @@ const RecipeDetailsPage = ({ isLoggedIn }) => {
   }
   const formatTime = (timeString) => {
     if (!timeString) return "N/A"
-    const minutes = timeString.replace("PT", "").replace("M", "")
-    return minutes.includes('minutes') ? minutes : `${minutes} minutes`
+    const minutes = timeString.replace("PT", "").replace("M", "min").replace('H', 'hr')
+    // return minutes.includes('minutes') ? minutes :
+    //   minutes.includes('h') ? minutes
+    //   : `${minutes} minutes`
+    return minutes
   }
 
   const toggleFavorite = () => {
@@ -188,11 +210,12 @@ const RecipeDetailsPage = ({ isLoggedIn }) => {
                 />
                 ) 
                 : 
-                viewTab === 'video' && recipe.videoURL && 
-                <video width="100%" controls autoPlay muted={false}>
-                  <source src={recipe.videoURL} type="video/mp4" />
-                  Your browser does not support the video tag
-                </video>
+                viewTab === 'video' && recipe.videoURL ? 
+                  <video width="100%" controls autoPlay muted={false}>
+                    <source src={recipe.videoURL} type="video/mp4" />
+                    Your browser does not support the video tag
+                  </video>
+                : <button className="button" onClick={fetchVideoByInstructions}> Click here to generate video</button>
              :
                 <img
                 src={recipe.RecipeId ? recipe.Images[0]?.replace(/"/g, "") 

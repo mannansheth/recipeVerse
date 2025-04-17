@@ -76,8 +76,8 @@ const AboutPage = () => {
               <div className="feature-icon">
                 <FaCalculator />
               </div>
-              <h3>Ingredient-Level Insights</h3>
-              <p>Understand the nutritional contribution of each ingredient in your recipes.</p>
+              <h3>Creative Recipe Generation</h3>
+              <p>Generate recipes based on available ingredients.</p>
             </div>
           </div>
         </section>
@@ -115,14 +115,21 @@ const AboutPage = () => {
             <div className="step">
               <div className="step-number-abt">4</div>
               <div className="step-content">
-                <h3>Save and Share</h3>
-                <p>Save recipes to your cookbook and share your creations with the RecipeVerse community.</p>
+                <h3>Generate recipes</h3>
+                <p>Get generated recipes based on ingredients available. </p>
+              </div>
+            </div>
+            <div className="step">
+              <div className="step-number-abt">5</div>
+              <div className="step-content">
+                <h3>Get automated instructions</h3>
+                <p>Follow the recipe instrcutions while watching a video.</p>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="about-section team-section">
+        {/* <section className="about-section team-section">
           <h2>Meet Our Team</h2>
           <div className="team-grid">
             <div className="team-member">
@@ -158,12 +165,9 @@ const AboutPage = () => {
             <a href="mailto:contact@recipeverse.com">contact@recipeverse.com</a>.
           </p>
           <div className="contact-button-container">
-            <Link to="/contact" className="contact-button-abt">
-              <FaEnvelope className="contact-icon" />
-              Contact Us
-            </Link>
+            
           </div>
-        </section>
+        </section> */}
       </div>
 
       <div className="about-cta">
@@ -171,11 +175,14 @@ const AboutPage = () => {
           <h2>Ready to start your culinary journey?</h2>
           <p>Join RecipeVerse today and transform the way you cook!</p>
           <div className="cta-buttons">
-            <Link to="/register" className="cta-button primary">
+            <Link to="/auth" className="cta-button primary">
               Sign Up Now
             </Link>
             <Link to="/recipes" className="cta-button secondary">
               Explore Recipes
+            </Link>
+            <Link to="/generate" className="cta-button secondary">
+              Generate recipes
             </Link>
           </div>
         </div>

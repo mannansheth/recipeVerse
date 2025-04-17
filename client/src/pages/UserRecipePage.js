@@ -5,7 +5,7 @@ import { toast } from "react-toastify"
 import NutritionInfo from "../components/NutritionInfo"
 import Loader from "../components/Loader"
 import { useLocation, useNavigate } from "react-router-dom"
-
+import { fetchNutritionInfo } from "../services/NutritionService"
 const UserRecipePage = ({ isLoggedIn }) => {
   const APP_ID = process.env.REACT_APP_NUTRITIONIX_APP_ID
   const API_KEY = process.env.REACT_APP_NUTRITIONIX_API_KEY
@@ -60,105 +60,19 @@ const UserRecipePage = ({ isLoggedIn }) => {
   }
 
   const fetchMacros = async () => {
-    var ingredients_str = ""
-    ingredients.forEach((item) => {
-      ingredients_str += `${item["quantity"]} ${item["name"]} `
-    })
-    if (ingredients_str === "  ") {
-      toast.error("Please enter ingredients")
-      setTimeout(() => {
-        setCurrentStep(2)
-      }, 100)
-      return
-    }
     setIsMacrosLoading(true)
     try {
-      const response = await axios.post(
-        "https://trackapi.nutritionix.com/v2/natural/nutrients",
-        { query: ingredients_str },
-        {
-          headers: {
-            "x-app-id": APP_ID,
-            "x-app-key": API_KEY,
-            "Content-Type": "application/json",
-          },
-        },
-      )
-
-      extractMacros(response.data)
+      const { macros, macrosByIngredients} = await fetchNutritionInfo(ingredients);
+      setMacros(macros);
+      setMacrosByIngredients(macrosByIngredients)
     } catch (error) {
       console.error("Error fetching macros: ", error)
       toast.error("Failed to fetch nutrition information. Please try again.")
-      setIsMacrosLoading(false)
     }
+    setIsMacrosLoading(false)
   }
 
-  const extractMacros = (all_details) => {
-    var detailsByIngredients = []
-    all_details["foods"].forEach((item) => {
-      detailsByIngredients.push({
-        Name: item["food_name"],
-        Serving: `${item["serving_qty"]}${item["serving_unit"]}`,
-        Calories: item["nf_calories"],
-        FatContent: item["nf_total_fat"],
-        SaturatedFatContent: item["nf_saturated_fat"],
-        CholesterolContent: item["nf_cholesterol"],
-        SodiumContent: item["nf_sodium"],
-        CarbohydrateContent: item["nf_total_carbohydrate"],
-        FiberContent: item["nf_dietary_fiber"],
-        SugarContent: item["nf_sugars"],
-        ProteinContent: item["nf_protein"],
-      })
-    })
-    setMacrosByIngredients(detailsByIngredients)
-    if (detailsByIngredients.length > 0) {
-      setSelectedIngredient(0)
-    }
-  }
-
-  useEffect(() => {
-    if (macrosByIngredients) {
-      setMacros({
-        Calories: Math.round(
-          macrosByIngredients.reduce((sum, item) => sum + item.Calories || 0, 0),
-          2,
-        ),
-        FatContent: Math.round(
-          macrosByIngredients.reduce((sum, item) => sum + item.FatContent || 0, 0),
-          2,
-        ),
-        SaturatedFatContent: Math.round(
-          macrosByIngredients.reduce((sum, item) => sum + item.SaturatedFatContent || 0, 0),
-          2,
-        ),
-        CholesterolContent: Math.round(
-          macrosByIngredients.reduce((sum, item) => sum + item.CholesterolContent || 0, 0),
-          2,
-        ),
-        SodiumContent: Math.round(
-          macrosByIngredients.reduce((sum, item) => sum + item.SodiumContent || 0, 0),
-          2,
-        ),
-        CarbohydrateContent: Math.round(
-          macrosByIngredients.reduce((sum, item) => sum + item.CarbohydrateContent || 0, 0),
-          2,
-        ),
-        FiberContent: Math.round(
-          macrosByIngredients.reduce((sum, item) => sum + item.FiberContent || 0, 0),
-          2,
-        ),
-        SugarContent: Math.round(
-          macrosByIngredients.reduce((sum, item) => sum + item.SugarContent || 0, 0),
-          2,
-        ),
-        ProteinContent: Math.round(
-          macrosByIngredients.reduce((sum, item) => sum + item.ProteinContent || 0, 0),
-          2,
-        ),
-      })
-      setIsMacrosLoading(false)
-    }
-  }, [macrosByIngredients])
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -175,8 +89,9 @@ const UserRecipePage = ({ isLoggedIn }) => {
       localStorage.setItem("userRecipe", JSON.stringify(recipe))
       toast.error("Error! You need to login first. Redirecting...")
       setTimeout(() => {
-        navigate("/auth", { state: { location: "/nutrition" } })
+        navigate("/auth", { state: { location: "/nutritions" } })
       }, 3000)
+      return;
     }
     try {
       const response = await axios.post(
@@ -204,7 +119,7 @@ const UserRecipePage = ({ isLoggedIn }) => {
       setTotalTime(userRecipe.TotalTime || "")
       setIngredients(userRecipe.Ingredients)
       setCategory(userRecipe.RecipeCategory || "")
-      setCurrentStep(location.state.step || 3)
+      setCurrentStep(location.state?.step || 3)
       localStorage.removeItem("userRecipe")
     }
   }, [])

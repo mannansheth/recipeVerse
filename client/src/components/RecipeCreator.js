@@ -1,11 +1,10 @@
-"use client"
 
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "./RecipeCreator.css"
 import axios from "axios"
 import { toast } from "react-toastify"
-
+import { fetchNutritionInfo } from "../services/NutritionService"
 const RecipeCreator = ({isLoggedIn}) => {
   
   const navigate = useNavigate()
@@ -42,12 +41,14 @@ const RecipeCreator = ({isLoggedIn}) => {
       setIsGenerating(true)
     }
     setGeneratedRecipe(JSON.parse(localStorage.getItem("recipe")))
-    localStorage.removeItem("recipe")
-    localStorage.removeItem("recipeStatus")
   }, [])
   useEffect(() => {
     if (generatedRecipe) {
       fetchImageURL(generatedRecipe.Name)
+      if (!generatedRecipe.Calories) {
+
+        fetchMacros(generatedRecipe.Ingredients)
+      }
     }
   }, [generatedRecipe])
   const fetchImageURL = async (name) => {
@@ -78,10 +79,7 @@ const RecipeCreator = ({isLoggedIn}) => {
         imageURL:generatedRecipe.image?.src.original,
         name: generatedRecipe.Name
       })
-
       toast.success("Video generated! Click on view full recipe.")
-      console.log(response.data);
-      
       const curr_recipe = generatedRecipe;
       curr_recipe['videoURL'] = response.data;
       setGeneratedRecipe(curr_recipe) 
@@ -99,7 +97,9 @@ const RecipeCreator = ({isLoggedIn}) => {
     toast.info("Generating a specialized recipe for you. This may take upto 1 minute.")
     try {
       const response = await axios.post(`http://${IP_ADDRESS}:5001/get-recipe`, {
-        ingredients
+        ingredients,
+        preference : dietaryPreference,
+        notes : additionalNotes
       })  
       setGeneratedRecipe(response.data)
       localStorage.setItem("recipe", (JSON.stringify(response.data)))
@@ -143,6 +143,18 @@ const RecipeCreator = ({isLoggedIn}) => {
   const handleViewFullRecipe = () => {
     navigate('/recipes/generated', {state: { generatedRecipe }})
   }
+  const fetchMacros = async (ingredients) => {
+      try {
+        const { macros, macrosByIngredients} = await fetchNutritionInfo(ingredients);
+        setGeneratedRecipe(prev => ({
+          ...prev,
+          ...macros
+        }));
+      } catch (error) {
+        console.error("Error fetching macros: ", error)
+        toast.error("Failed to fetch nutrition information. Please try again.")
+      }
+    }
   return (
     <div className="recipe-creator">
       
@@ -271,7 +283,7 @@ const RecipeCreator = ({isLoggedIn}) => {
                 <ol className="generated-recipe-list numbered">
                   {generatedRecipe.RecipeInstructions.map((step, index) => (
                     <li key={index} className="generated-recipe-list-item">
-                      {step}
+                      {step.replace(`Step ${index+1}:`, '')}
                     </li>
                   ))}
                 </ol>

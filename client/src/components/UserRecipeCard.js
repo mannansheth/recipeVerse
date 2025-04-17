@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./UserRecipeCard.css";
 import NutritionInfo from "./NutritionInfo";
+import { FaEllipsis } from "react-icons/fa6";
+import { toast } from "react-toastify";
 
 const UserRecipeCard = ({ recipe, setUserRecipes }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -43,20 +45,20 @@ const UserRecipeCard = ({ recipe, setUserRecipes }) => {
         <h3 className="user-recipe-title">{recipe.Name || recipe.title}</h3>
         <div className="user-recipe-actions">
           <button className="action-button" onClick={toggleDropdown}>
-            ⋮
+            <FaEllipsis />
           </button>
           {showDropdown && (
             <div className="dropdown-menu">
               <button onClick={handleViewDetails}>View Details</button>
               <button onClick={handleEdit}>Edit Recipe</button>
-              <button onClick={handleDelete} className="delete-button">
+              <button onClick={() => handleDelete(recipe.id)} className="delete-button">
                 Delete
               </button>
             </div>
           )}
         </div>
       </div>
-      <p className="recipe-description">{recipe.Description || recipe.description || "A delicious homemade recipe."}</p>
+      <p className="user-recipe-description">{recipe.Description || recipe.description || "A delicious homemade recipe."}</p>
       <div className="nutrition-label-div" >
 
         <NutritionInfo macros={recipe}/>

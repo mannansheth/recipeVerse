@@ -64,9 +64,9 @@ const Login = ({ setIsLoggedIn }) => {
     } catch (err) {
       const errorMsg = err.response?.data?.message || 'An error occurred. Please try again later.';
       toast.error(errorMsg);
-      if (err.response?.data?.error === 'email/username') setEmailError(true) ; setUsernameError(true);
-      if (err.response?.data?.error === 'password') setPasswordError(true)
-      if (err.response?.data?.error === 'all') setPasswordError(true); setEmailError(true) ; setUsernameError(true);
+      if (err.response?.data?.error === 'email/username') { setEmailError(true) ; setUsernameError(true) };
+      if (err.response?.data?.error === 'password') setPasswordError(true);
+      if (err.response?.data?.error === 'all') { setPasswordError(true); setEmailError(true) ; setUsernameError(true) };
     }
   };
 

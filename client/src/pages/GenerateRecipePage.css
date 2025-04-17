@@ -13,5 +13,6 @@
   color: var(--color-muted);
   margin-bottom: 2rem;
   max-width: 800px;
+  font-weight:700;
 }
 
